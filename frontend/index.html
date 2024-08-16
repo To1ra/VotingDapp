@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voting dApp</title>
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+  </head>
+  <body>
+    <div id="connectMetamask">
+      <p id="connectWalletMessage">
+        Please connect your Metamask wallet to vote
+      </p>
+      <button id="connectWallet">Connect Wallet</button>
+    </div>
+    <div id="votingStation">
+      <div id="timer">
+        <div id="timer">  
+          <p id="timerMessage"> <span id="time">-</span> </p>
+        </div>
+        <div id="mainBoard">
+          <table id="CandidateBoard">
+            <tr>
+              <th>ID No.</th>
+              <th>Candidate</th>
+            </tr>
+          </table>
+        </div>
+         <div id="voteForm">
+  <p> please select thr ID your candidate</p>
+          <label>
+            <input type="number" id="vote" />
+            <button id="sendVote">Send Vote</button>
+          </label>
+         </div>
+         <div id="showResultsContainer">
+          <button id="showResult"  style="display: none"> Show Results</button>
+         </div>
+         <div id="result" style="display: none">
+          <table id="resultsBoard">
+            <tr>
+              <th>ID No.</th> 
+              <th>Candidate</th>
+              <th>Number Of Votes</th>
+            </tr>
+          
+          </table>
+         </div>
+         <div id="admin">
+          <p id="adminHeading">Comelec Only</p>
+          <div id="tools">
+            
+        <div id="startElection">
+  <p id="startElectionMessage">Start Election </p>
+  <input type="text" id="candidiates" placeholder="Names separated by commas" />
+  <input type="number" id="electionDuration" placeholder="Duration in minutes" />
+  <button id="startAnElection">Start Election</button>
+</div>
+
+            <div id="addCandidate">
+              <p id="addCandidateMessage">Add Candidate</p>
+              <input type="text" id="candidate" placeholder="Candidate Name" />
+              <button id="addTheCandidate">Add Candidate</button>
+            </div>      
+            </div>
+         </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
