@@ -1,6 +1,6 @@
 Todo:
 
-1) fix reloading "bug"
+1) fix TIME reloading "bug" (skip for now) - Done
 2) Loading Bar untill the trx has proccessed entirly
 3) add vote to options
 4) add candidate option

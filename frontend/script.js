@@ -295,7 +295,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!electionActive) {
       const duration = parseInt(electionDurationInput.value);
       const candidates = candidatesInput.value.split(",");
-      await contract.startElection(candidates, duration);
+      document.getElementById("MainContent").style.display = "none";
+      document.getElementById("Loader").style.display = "block";
+      const txResponse = await contract.startElection(candidates, duration);
+      const txReceipt = await txResponse.wait();
+      document.getElementById("Loader").style.display = "none";
+      document.getElementById("MainContent").style.display = "block";
+
       await displayCandidates();
     } else {
       alert("An election is already ongoing.");

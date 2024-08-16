@@ -199,12 +199,12 @@ label {
   border-radius: 5px;
 }
 
-/* HTML: <div class="loader"></div> */
-.loader {
-  position: fixed; /* or absolute */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+#Loader {
+  position: fixed;
+  inset: 0px;
+  max-width: 100vw;
+  max-height: 100dvh;
+  margin: auto;
   width: 120px;
   height: 20px;
   background: linear-gradient(90deg, #0000, orange) left -50px top 0/50px 20px no-repeat
