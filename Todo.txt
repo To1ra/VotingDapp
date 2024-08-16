@@ -1,8 +1,12 @@
 Todo:
 
-1) fix TIME reloading "bug" (skip for now) - Done
-2) Loading Bar untill the trx has proccessed entirly
-3) add vote to options
-4) add candidate option
+1) fix TIME reloading "bug"  - Done
+2) Loading Bar untill the trx has proccessed entirly - Done
+3) add vote to options - Done
+
+
+VOTE ONLY ONCE bug
+SHOW BUTTON AUTO SHOWS
 4) show winner + show results
-5) give ERC20 for every voter which is not the admin
+5) add candidate option
+6) give ERC20 for every voter which is not the admin

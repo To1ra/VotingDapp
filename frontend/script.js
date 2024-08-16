@@ -261,8 +261,9 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshInterval = setInterval(refreshPageData, 1500); // Refresh every 1. seconds
   }
 
+
   async function displaySortedVoters() {
-    const voterList = await contract.retrieveVoterList();
+    const voterList = [...await contract.retrieveVoterList()]; // Shallow copy the array
     voterList.sort((a, b) => {
       if (a.numberOfvotes > b.numberOfvotes) {
         return -1;
@@ -272,6 +273,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       return 0;
     });
+    return voterList;
+  }
+  async function vote() {
+    const electionActive = await contract.electionStarted(); // This method needs to be view type in your Solidity contract
+    if(electionActive) {
+    const id = parseInt(voteInput.value);
+    await contract.voteTo(id);
+    }
   }
 
   async function refreshPageData() {
@@ -283,9 +292,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const timeLeft = await contract.electionTimer();
       if (timeLeft > 0) {
         timerElement.innerText = `${timeLeft} seconds left`;
+        if(candidateBoard.innerHTML == "<tr><th>ID No.</th><th>Candidate</th></tr>") {
+          await displayCandidates();
+        }
       } else {
         timerElement.innerText = "Voting has ended";
-        clearInterval(refreshInterval);
         await showResults();
       }
     }
@@ -308,10 +319,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  async function showResults() {
-    alert("checking results");
+  async function  showResults() {
+    const results = await displaySortedVoters();
+    const resultsBoard = document.getElementById("resultsBoard"); // Get the correct table element
+    resultsBoard.innerHTML = "<tr><th>ID No.</th><th>Candidate</th><th>Number Of Votes</th></tr>"; // Reset the table with headers
+  
+    results.forEach((result) => {
+      const row = resultsBoard.insertRow(); // Insert a new row in the table
+      row.insertCell(0).innerText = result.id;
+      row.insertCell(1).innerText = result.name;
+      row.insertCell(2).innerText = result.numberOfvotes;
+    });
+  
+    document.getElementById("showResultsContainer").style.display = "block";
+    document.getElementById("result").style.display = "block";
   }
-
+  
   async function displayCandidates() {
     const candidates = await contract.retrieveVoterList();
     // Clear the board before displaying candidates
