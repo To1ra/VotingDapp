@@ -1,0 +1,8 @@
+Todo:
+
+1) fix reloading "bug"
+2) Loading Bar untill the trx has proccessed entirly
+3) add vote to options
+4) add candidate option
+4) show winner + show results
+5) give ERC20 for every voter which is not the admin
