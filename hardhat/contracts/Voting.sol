@@ -36,7 +36,7 @@ contract Voting {
     
     function startElection(string[] memory _candidates, uint256 _votingDuration) public onlyOwner {
         require(block.timestamp > votingEnd || votingStart == 0, "Cannot start a new election; an election is already in progress.");
-        
+        resetVoters();
         delete candidates; // Clear existing candidates
         for(uint256 i = 0; i < _candidates.length; i++) {
             candidates.push(Candidate({id: i, name: _candidates[i], numberOfvotes: 0}));
@@ -50,13 +50,21 @@ contract Voting {
         candidates.push(Candidate({id: candidates.length, name: _name, numberOfvotes: 0}));
     }
 
-    function voteTo(uint256 _id) public {
-        require(block.timestamp <= votingEnd && block.timestamp >= votingStart, "Cannot vote; election period has not started or has ended.");
-        require(!voters[msg.sender], "You already voted. You can only vote once");
-        candidates[_id].numberOfvotes++;
-        voters[msg.sender] = true;
-        listOfVoters.push(msg.sender);
+        function voteTo(uint256 _id) public {
+            require(block.timestamp <= votingEnd && block.timestamp >= votingStart, "Cannot vote; election period has not started or has ended.");
+            require(!voters[msg.sender], "You already voted. You can only vote once");
+            candidates[_id].numberOfvotes++;
+            voters[msg.sender] = true;
+            listOfVoters.push(msg.sender);
+        }
+
+        function resetVoters() internal {
+         for (uint256 i = 0; i < listOfVoters.length; i++) {
+        voters[listOfVoters[i]] = false; // Reset the voters mapping for each voter
+        }
+    delete listOfVoters; // Clear the list of voters
     }
+
 
     function retrieveVoterList() public view returns(Candidate[] memory) {
         return candidates;

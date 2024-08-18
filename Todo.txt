@@ -3,10 +3,11 @@ Todo:
 1) fix TIME reloading "bug"  - Done
 2) Loading Bar untill the trx has proccessed entirly - Done
 3) add vote to options - Done
+4) show winner + show results - Done
+5) add candidate option - DONE
 
 
-VOTE ONLY ONCE bug
-SHOW BUTTON AUTO SHOWS
-4) show winner + show results
-5) add candidate option
+TMR
 6) give ERC20 for every voter which is not the admin
+7a) Fix Visual bugs from yesterday -> showbutton and popup
+7b) Bug Fix from powerPoint

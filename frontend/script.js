@@ -3,10 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const provider = new ethers.providers.Web3Provider(ethereum);
   let signer;
   let contract;
+  let flag = false;
   let isResultsVisible = false; // Track visibility of results
   let refreshInterval; // Interval for refreshing the page data
 
-  const contractAddress = "0x05922204213973ABe5654176422A859b6dD7c71A";
+  const contractAddress = "0xaaF2e28a24B52e468B34A3F1727e42a2f91E3B5E";
   const contractABI = [
     {
       inputs: [],
@@ -259,11 +260,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("votingStation").style.display = "block";
     document.getElementById("connectMetamask").style.display = "none";
     refreshInterval = setInterval(refreshPageData, 1500); // Refresh every 1. seconds
+
+    const electionActive = await contract.electionStarted(); // This method needs to be view type in your Solidity contract
+    if (electionActive) {
+      await displayCandidates();
+    }
   }
 
-
   async function displaySortedVoters() {
-    const voterList = [...await contract.retrieveVoterList()]; // Shallow copy the array
+    const voterList = [...(await contract.retrieveVoterList())]; // Shallow copy the array
     voterList.sort((a, b) => {
       if (a.numberOfvotes > b.numberOfvotes) {
         return -1;
@@ -277,10 +282,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   async function vote() {
     const electionActive = await contract.electionStarted(); // This method needs to be view type in your Solidity contract
-    if(electionActive) {
-    const id = parseInt(voteInput.value);
-    await contract.voteTo(id);
-    }
+    if (electionActive) {
+      const id = parseInt(voteInput.value);
+      await contract.voteTo(id);
+    } else alert("You cannt vote when there is no election");
   }
 
   async function refreshPageData() {
@@ -292,18 +297,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const timeLeft = await contract.electionTimer();
       if (timeLeft > 0) {
         timerElement.innerText = `${timeLeft} seconds left`;
-        if(candidateBoard.innerHTML == "<tr><th>ID No.</th><th>Candidate</th></tr>") {
-          await displayCandidates();
-        }
+        await displayCandidates();
       } else {
         timerElement.innerText = "Voting has ended";
-        await showResults();
+        document.getElementById("showResult").style.display = "block";
       }
     }
   }
   async function startElection() {
     const electionActive = await contract.electionStarted(); // Ensure this is a view function in Solidity
     if (!electionActive) {
+      flag = false;
       const duration = parseInt(electionDurationInput.value);
       const candidates = candidatesInput.value.split(",");
       document.getElementById("MainContent").style.display = "none";
@@ -314,27 +318,48 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("MainContent").style.display = "block";
 
       await displayCandidates();
-    } else {
-      alert("An election is already ongoing.");
-    }
+    } else alert("An election is already ongoing.");
   }
 
-  async function  showResults() {
+  async function showResults() {
     const results = await displaySortedVoters();
-    const resultsBoard = document.getElementById("resultsBoard"); // Get the correct table element
-    resultsBoard.innerHTML = "<tr><th>ID No.</th><th>Candidate</th><th>Number Of Votes</th></tr>"; // Reset the table with headers
-  
+    const winner = results[0]; // Assuming the sorted list has the winner at index 0
+    const winnerName = document.getElementById("winnerName");
+    winnerName.innerText = `${winner.name} is the Winner!`;
+
+    // Display the pop-up
+    const modal = document.getElementById("winnerPopup");
+    const span = document.getElementsByClassName("close")[0];
+
+    modal.style.display = "block";
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    window.onclick = function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    };
+
+    // Create results in the results table
+    const resultsBoard = document.getElementById("resultsBoard");
+    resultsBoard.innerHTML =
+      "<tr><th>ID No.</th><th>Candidate</th><th>Number Of Votes</th></tr>";
     results.forEach((result) => {
-      const row = resultsBoard.insertRow(); // Insert a new row in the table
+      const row = resultsBoard.insertRow();
       row.insertCell(0).innerText = result.id;
       row.insertCell(1).innerText = result.name;
       row.insertCell(2).innerText = result.numberOfvotes;
     });
-  
-    document.getElementById("showResultsContainer").style.display = "block";
-    document.getElementById("result").style.display = "block";
   }
-  
+
+  function buttonShowResults() {
+    const resultSection = document.getElementById("result");
+    resultSection.style.display =
+      resultSection.style.display === "none" ? "block" : "none";
+  }
+
   async function displayCandidates() {
     const candidates = await contract.retrieveVoterList();
     // Clear the board before displaying candidates
@@ -346,9 +371,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  async function addCandidate() {
+    const electionActive = await contract.electionStarted(); // This method needs to be view type in your Solidity contract
+    if (electionActive) {
+      const name = candidateInput.value;
+      await contract.addCandidate(name);
+      await displayCandidates();
+    } else alert("You cannt add candidate when there is no election");
+  }
+
   connectWalletButton.addEventListener("click", connectWallet);
   sendVoteButton.addEventListener("click", vote);
   startElectionButton.addEventListener("click", startElection);
   addCandidateButton.addEventListener("click", addCandidate);
-  showResultButton.addEventListener("click", showResults);
+  document
+    .getElementById("showResult")
+    .addEventListener("click", async function () {
+      if (!flag) {
+        await showResults();
+        flag = true;
+      }
+      buttonShowResults();
+    });
 });

@@ -33,16 +33,16 @@
           </table>
         </div>
          <div id="voteForm">
-  <p> please select thr ID your candidate</p>
+  <p> please select the ID your candidate</p>
           <label>
             <input type="number" id="vote" />
             <button id="sendVote">Send Vote</button>
           </label>
          </div>
-         <div id="showResultsContainer" style="display: none">
+         <div id="showResultsContainer" >
           <button id="showResult" > Show Results</button>
          </div>
-         <div id="result" style="display: none">
+         <div id="result" >
           <table id="resultsBoard">
             <tr>
               <th>ID No.</th> 
@@ -72,6 +72,17 @@
          </div>
     </div>
 </div>
+
+<!-- Winner Pop-Up Modal -->
+<div id="winnerPopup" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="winnerName"></h2>
+    <img src="ori.png" style="width: 100px; height: 100px;" alt="Trophy" />
+    <p>#1</p>
+  </div>
+</div>
+
     <script src="script.js"></script>
   </body>
 </html>
