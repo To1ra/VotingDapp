@@ -8,6 +8,6 @@ Todo:
 
 
 TMR
-6) give ERC20 for every voter which is not the admin
+6) give ERC20 for every voter which is not the admin - ongoing
 7a) Fix Visual bugs from yesterday -> showbutton and popup
 7b) Bug Fix from powerPoint

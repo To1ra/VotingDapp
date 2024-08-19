@@ -1,5 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.18;
+pragma solidity ^0.8.20;
+interface IERC20 {
+    function transfer(address to, uint256 amount) external returns (bool);
+}
 
 contract Voting {
 
@@ -15,6 +18,8 @@ contract Voting {
     address[] public listOfVoters;
     uint256 public votingStart;
     uint256 public votingEnd;
+    IERC20 public tokenContract;
+
 
     modifier onlyOwner() {
         require(msg.sender == owner, "You are not authorized to perform this action");
@@ -26,9 +31,22 @@ contract Voting {
         _;
     }
 
-    constructor() {
+ constructor(address _tokenContract) {
         owner = msg.sender;
+        tokenContract = IERC20(_tokenContract);
     }
+
+
+    function payVoters() public onlyOwner electionOnGoing {
+        uint256 amount = 5 * 10**18;  // Assumes the token has 18 decimals
+        for(uint256 i = 0; i < listOfVoters.length; i++) {
+            if(listOfVoters[i] != owner) { // Check that the voter is not the admin
+                require(tokenContract.transfer(listOfVoters[i], amount), "Failed to transfer tokens");
+            }
+        }
+    }
+
+ 
 
   function electionStarted() public view returns (bool) {
         return block.timestamp >= votingStart && block.timestamp <= votingEnd;
@@ -76,13 +94,5 @@ contract Voting {
             return 0;
         }
         return (votingEnd - block.timestamp);
-    }
-
-
-    function revertAllVoterStatus() public onlyOwner {
-        for(uint256 i = 0; i < listOfVoters.length; i++) {
-            voters[listOfVoters[i]] = false;
-        }
-        delete listOfVoters;
     }
 }

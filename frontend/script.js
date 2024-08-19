@@ -7,10 +7,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let isResultsVisible = false; // Track visibility of results
   let refreshInterval; // Interval for refreshing the page data
 
-  const contractAddress = "0xaaF2e28a24B52e468B34A3F1727e42a2f91E3B5E";
+  const contractAddress = "0xfd6fa33cf64592CEb9b7907f40D823A08e96939b";
   const contractABI = [
     {
-      inputs: [],
+      inputs: [
+        {
+          internalType: "address",
+          name: "_tokenContract",
+          type: "address",
+        },
+      ],
       stateMutability: "nonpayable",
       type: "constructor",
     },
@@ -116,6 +122,13 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     {
       inputs: [],
+      name: "payVoters",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
       name: "retrieveVoterList",
       outputs: [
         {
@@ -145,13 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "function",
     },
     {
-      inputs: [],
-      name: "revertAllVoterStatus",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
       inputs: [
         {
           internalType: "string[]",
@@ -167,6 +173,19 @@ document.addEventListener("DOMContentLoaded", () => {
       name: "startElection",
       outputs: [],
       stateMutability: "nonpayable",
+      type: "function",
+    },
+    {
+      inputs: [],
+      name: "tokenContract",
+      outputs: [
+        {
+          internalType: "contract IERC20",
+          name: "",
+          type: "address",
+        },
+      ],
+      stateMutability: "view",
       type: "function",
     },
     {
@@ -321,6 +340,16 @@ document.addEventListener("DOMContentLoaded", () => {
     } else alert("An election is already ongoing.");
   }
 
+  async function distributeTokens() {
+    try {
+      const txResponse = await contract.payVoters(); // Call the payVoters function in your contract
+      await txResponse.wait(); // Wait for the transaction to be mined
+      console.log("Tokens distributed to voters");
+    } catch (error) {
+      console.error("Error distributing tokens: ", error);
+    }
+  }
+
   async function showResults() {
     const results = await displaySortedVoters();
     const winner = results[0]; // Assuming the sorted list has the winner at index 0
@@ -389,6 +418,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .addEventListener("click", async function () {
       if (!flag) {
         await showResults();
+        await distributeTokens();
         flag = true;
       }
       buttonShowResults();
