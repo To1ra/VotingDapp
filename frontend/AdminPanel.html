@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - Election House</title>
+    <link rel="stylesheet" href="styles/homePage.css" />
+    <link rel="stylesheet" href="styles/CreateElectionModal.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">ElectionDapp</div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><button id="connectWallet">Connect Wallet</button></li>
+      </ul>
+    </nav>
+    <div class="admin-panel">
+      <h1>Admin Panel</h1>
+      <div class="button-group">
+        <!-- Group for horizontal layout -->
+        <button class="btn1" id="createElection">Create Election</button>
+        <button class="btn1" id="tokenBalance">Token Balance</button>
+        <button class="btn1" id="editElection">Edit Ongoing Election</button>
+      </div>
+    </div>
+
+    <!-- Create Election Modal -->
+    <div id="createElectionModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h1>Create Election</h1>
+        <div class="modal-section">
+          <label>Add Candidates <button id="addCandidate">+</button></label>
+          <div id="candidateList" class="candidate-list"></div>
+        </div>
+        <div class="modal-section">
+          <label for="electionTime">Time In Minutes</label>
+          <input type="number" id="electionTime" placeholder="Enter time" />
+        </div>
+        <button id="submitElection">Submit</button>
+      </div>
+    </div>
+
+    <script src="scripts/adminPanel.js"></script>
+  </body>
+</html>

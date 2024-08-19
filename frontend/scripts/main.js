@@ -1,12 +1,12 @@
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
-let signer;
-let contract;
+export let signer;
+export let contract;
 
 const connectWalletButton = document.getElementById("connectMetamask");
 const userNameDisplay = document.getElementById("userNameDisplay");
-const contractAddress = "0x1d8D12baE190AfA51343945cDdF9305A2962C558";
-const contractABI = [
+export const contractAddress = "0x1d8D12baE190AfA51343945cDdF9305A2962C558";
+export const contractABI = [
   {
     inputs: [
       {
@@ -269,7 +269,7 @@ async function connectWallet() {
   localStorage.setItem("userName", userName);
 
   userNameDisplay.innerText = userName;
-
+  const ownerAddress = await contract.owner();
   if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
     document.getElementById("admin").style.display = "block";
   }
@@ -277,10 +277,4 @@ async function connectWallet() {
   document.getElementById("navBar").style.display = "block";
 }
 
-module.exports = {
-  connectWallet,
-  signer,
-  contract,
-  contractAddress,
-  contractABI,
-};
+connectWalletButton.addEventListener("click", connectWallet());

@@ -6,10 +6,33 @@ Todo:
 4) show winner + show results - Done
 5) add candidate option - DONE
 6) give ERC20 for every voter which is not the admin - Done
+7) create a home screen - DONE
 
 
-today
-- create a home screen
+8) Finish Admin Panel [front only]:
+8a) Create Election Modal -as planned, (add election name + it will get an id) check for double values and send erros (alertd) for name and coords
+8b) Create Token Balance section
+8c) Create Add Candidate in election section (it will show the onGoing Elections as blocks to enter for adding)
+
+9) Create the current Election Page [Front + Back(no change just to show) ]:
+9a) try to replicate the use of the table (main project) though in a nicer way 
+9b) add a timer
+9c) add a page refresher
+9d) add a button for voting
+9e) TEMP__ add a show results button like in the main(in order to see if it works ok for the same logic even though I will replace it ) __TEMP
+
+10) Change back so it will work with the new candidates system, then check if worked
+
+11) Prev election - front only
+
+12) Prev election - back only
+
+13) Power Point
+
+
+
+
+
 - create Complex candidate maker and voter can choose what he preferse 
 
 TMR
@@ -17,6 +40,3 @@ TMR
 - create a page for the current vote
 - create a page to see all prevoius votes
 - create a page for the admin panel
-
-
-7b) Bug Fix from powerPoint

@@ -1,5 +1,1 @@
-mod;
-
-async function connectWallet() {}
-
-connectWalletButton.addEventListener("click", connectWallet);
+import * as Main from "./main.js";
