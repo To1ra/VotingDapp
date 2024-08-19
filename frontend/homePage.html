@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Election House</title>
+    <link rel="stylesheet" href="styles/homePage.css" />
+    <script
+      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+      type="application/javascript"
+    ></script>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <span style="margin: 10px">ElectionDapp |</span>
+        <sub>Hello, <span id="userNameDisplay">user</span></sub>
+      </div>
+
+      <ul class="nav-links" id="navBar" style="display: none">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Current Election</a></li>
+        <li><a href="#">Past Elections</a></li>
+        <li><a href="#" style="display: none">Admin Panel</a></li>
+      </ul>
+    </nav>
+    <header class="hero">
+      <div class="hero-content">
+        <h1>Welcome to Election House</h1>
+        <p>Connect. Vote. Decide.</p>
+        <button class="btn" id="connectMetamask">Log In</button>
+      </div>
+    </header>
+    <script src="scripts/homePage.js"></script>
+  </body>
+</html>

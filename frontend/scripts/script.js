@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let flag = false;
   const ethereum = window.ethereum;
   const provider = new ethers.providers.Web3Provider(ethereum);
   let signer;
   let contract;
-  let flag = false;
   let isResultsVisible = false; // Track visibility of results
   let refreshInterval; // Interval for refreshing the page data
 
-  const contractAddress = "0xfd6fa33cf64592CEb9b7907f40D823A08e96939b";
+  const contractAddress = "0x1d8D12baE190AfA51343945cDdF9305A2962C558";
   const contractABI = [
     {
       inputs: [
@@ -158,6 +158,19 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "function",
     },
     {
+      inputs: [],
+      name: "retrieveVotersAddress",
+      outputs: [
+        {
+          internalType: "address[]",
+          name: "",
+          type: "address[]",
+        },
+      ],
+      stateMutability: "view",
+      type: "function",
+    },
+    {
       inputs: [
         {
           internalType: "string[]",
@@ -247,7 +260,6 @@ document.addEventListener("DOMContentLoaded", () => {
       type: "function",
     },
   ];
-
   // Elements from the HTML
   const connectWalletButton = document.getElementById("connectWallet");
   const sendVoteButton = document.getElementById("sendVote");
@@ -308,25 +320,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function refreshPageData() {
-    const electionActive = await contract.electionStarted(); // This method needs to be view type in your Solidity contract
-    if (!electionActive) {
-      timerElement.innerText = "No election currently running";
+    const electionActive = await contract.electionStarted();
+    const candidates = await contract.retrieveVoterList();
+    if (!electionActive && candidates.length != 0) {
+      clearInterval(refreshInterval);
+      timerElement.innerText = "Previous Voting has ended";
+      document.getElementById("showResult").style.display = "block";
+    } else if (!electionActive) {
+      timerElement.innerText = "No election currently running in the network";
       candidateBoard.innerHTML = "<tr><th>ID No.</th><th>Candidate</th></tr>";
     } else {
       const timeLeft = await contract.electionTimer();
       if (timeLeft > 0) {
         timerElement.innerText = `${timeLeft} seconds left`;
         await displayCandidates();
-      } else {
-        timerElement.innerText = "Voting has ended";
-        document.getElementById("showResult").style.display = "block";
       }
     }
   }
   async function startElection() {
     const electionActive = await contract.electionStarted(); // Ensure this is a view function in Solidity
     if (!electionActive) {
-      flag = false;
       const duration = parseInt(electionDurationInput.value);
       const candidates = candidatesInput.value.split(",");
       document.getElementById("MainContent").style.display = "none";
@@ -335,18 +348,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const txReceipt = await txResponse.wait();
       document.getElementById("Loader").style.display = "none";
       document.getElementById("MainContent").style.display = "block";
-
       await displayCandidates();
     } else alert("An election is already ongoing.");
   }
 
   async function distributeTokens() {
     try {
-      const txResponse = await contract.payVoters(); // Call the payVoters function in your contract
-      await txResponse.wait(); // Wait for the transaction to be mined
-      console.log("Tokens distributed to voters");
+      const txResponse = await contract.payVoters({ gasLimit: 1000000 }); // Adjust as needed
+      const receipt = await txResponse.wait();
+      console.log("Transaction successful:", receipt);
     } catch (error) {
-      console.error("Error distributing tokens: ", error);
+      console.error("Error while distributing tokens:", error);
     }
   }
 
@@ -371,7 +383,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    // Create results in the results table
     const resultsBoard = document.getElementById("resultsBoard");
     resultsBoard.innerHTML =
       "<tr><th>ID No.</th><th>Candidate</th><th>Number Of Votes</th></tr>";

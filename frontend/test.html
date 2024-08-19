@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style></style>
+    <title>Political Diagram</title>
+  </head>
+  <body>
+    <div id="grid-container">
+      <div id="grid"></div>
+      <div id="axes-labels">
+        <!-- Vertical axis labels -->
+        <div class="axis-label" id="vertical-axis-top">Akrateia</div>
+        <div class="axis-label" id="vertical-axis-bottom">Kratos</div>
+
+        <!-- Horizontal axis labels -->
+        <div class="axis-label" id="horizontal-axis-left">Anarchy</div>
+        <div class="axis-label" id="horizontal-axis-right">Archy</div>
+
+        <!-- Quadrant Labels -->
+        <div class="quadrant-label" id="top-left">
+          Libertarian Individualist
+        </div>
+        <div class="quadrant-label" id="top-right">
+          Republican Constitutionalist
+        </div>
+        <div class="quadrant-label" id="bottom-left">
+          Democratic Progressivist
+        </div>
+        <div class="quadrant-label" id="bottom-right">
+          Plutocratic Nationalist
+        </div>
+
+        <!-- Center Point -->
+        <div id="center-point"></div>
+      </div>
+    </div>
+
+    <div id="coordinates-display">Coordinates: (0.00, 0.00)</div>
+
+    <div id="saved-locations">
+      <h3>Saved Locations:</h3>
+      <ul id="locations-list"></ul>
+    </div>
+
+    <script>
+      const gridContainer = document.getElementById("grid-container");
+      const coordinatesDisplay = document.getElementById("coordinates-display");
+      const locationsList = document.getElementById("locations-list");
+
+      let savedLocations = [];
+
+      gridContainer.addEventListener("mousemove", (event) => {
+        const rect = gridContainer.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const gridX = (x - 0.5) * 2;
+        const gridY = (0.5 - y) * 2;
+
+        coordinatesDisplay.textContent = `Coordinates: (${gridX.toFixed(
+          2
+        )}, ${gridY.toFixed(2)})`;
+      });
+
+      gridContainer.addEventListener("click", (event) => {
+        const rect = gridContainer.getBoundingClientRect();
+        const x = (event.clientX - rect.left) / rect.width;
+        const y = (event.clientY - rect.top) / rect.height;
+        const gridX = (x - 0.5) * 2;
+        const gridY = (0.5 - y) * 2;
+
+        if (savedLocations.length < 5) {
+          const location = `(${gridX.toFixed(2)}, ${gridY.toFixed(2)})`;
+          savedLocations.push(location);
+          updateSavedLocations();
+        }
+      });
+
+      function updateSavedLocations() {
+        locationsList.innerHTML = "";
+        savedLocations.forEach((location, index) => {
+          const li = document.createElement("li");
+          li.textContent = `Point ${index + 1}: ${location}`;
+          locationsList.appendChild(li);
+        });
+      }
+    </script>
+  </body>
+</html>

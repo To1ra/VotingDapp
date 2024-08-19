@@ -5,9 +5,18 @@ Todo:
 3) add vote to options - Done
 4) show winner + show results - Done
 5) add candidate option - DONE
+6) give ERC20 for every voter which is not the admin - Done
 
+
+today
+- create a home screen
+- create Complex candidate maker and voter can choose what he preferse 
 
 TMR
-6) give ERC20 for every voter which is not the admin - ongoing
-7a) Fix Visual bugs from yesterday -> showbutton and popup
+7) reshape the visuality of the website:
+- create a page for the current vote
+- create a page to see all prevoius votes
+- create a page for the admin panel
+
+
 7b) Bug Fix from powerPoint

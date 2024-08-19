@@ -37,7 +37,7 @@ contract Voting {
     }
 
 
-    function payVoters() public onlyOwner electionOnGoing {
+    function payVoters() public onlyOwner  {
         uint256 amount = 5 * 10**18;  // Assumes the token has 18 decimals
         for(uint256 i = 0; i < listOfVoters.length; i++) {
             if(listOfVoters[i] != owner) { // Check that the voter is not the admin
@@ -45,8 +45,7 @@ contract Voting {
             }
         }
     }
-
- 
+    
 
   function electionStarted() public view returns (bool) {
         return block.timestamp >= votingStart && block.timestamp <= votingEnd;
@@ -88,6 +87,9 @@ contract Voting {
         return candidates;
     }
 
+      function retrieveVotersAddress() public view returns(address[] memory) {
+        return listOfVoters;
+    }
 
     function electionTimer() public view electionOnGoing returns(uint256) {
         if(block.timestamp >= votingEnd) {
