@@ -1,3 +1,67 @@
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 35%; /* Slightly wider to match the drawn proportions */
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* Allow proper positioning of children */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional: Add some shadow */
+}
+
+/* Close button styling */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 28px;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.modal-section .label-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-section label {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.candidate-list {
+  border: 2px solid #888;
+  padding: 10px;
+  height: 150px; /* Adjust height to match the drawing */
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+#submitElection {
+  margin-top: 20px; /* Adds space above the button */
+  padding: 10px 20px;
+  background-color: #555555;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; /* Ensure it stretches across the modal */
+}
+
+#submitElection:hover {
+  background-color: #777777;
+}
+
 .modal {
   display: none;
   position: fixed;
@@ -8,22 +72,17 @@
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
+  justify-content: center; /* Ensure modal is centered horizontally */
+  align-items: center; /* Ensure modal is centered vertically */
 }
 
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
+.modal-section input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
   border: 1px solid #888;
-  width: 80%;
-  text-align: center;
-}
-
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
 .close:hover,
@@ -31,21 +90,6 @@
   color: black;
   text-decoration: none;
   cursor: pointer;
-}
-
-.modal-section {
-  margin-bottom: 20px;
-}
-
-.candidate-list {
-  border: 2px solid #888;
-  padding: 10px;
-  height: 60px;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
-  align-items: center;
 }
 
 .candidate-number {

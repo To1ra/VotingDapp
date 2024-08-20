@@ -32,9 +32,9 @@ https://sepolia.etherscan.io/address/0xB3edBFC4DC9B276086BdcC06F6875ec2B9B5B534#
 DONT TOUCH IT 
 
 
-Voting Contract deployed to: 0x1d8D12baE190AfA51343945cDdF9305A2962C558
+Voting Contract deployed to: 0x453fAcB289b125B523ec0ce508f33546079F4c4c
 
 Successfully verified contract Voting on the block explorer.
-https://sepolia.etherscan.io/address/0x1d8D12baE190AfA51343945cDdF9305A2962C558#code
+https://sepolia.etherscan.io/address/0x453fAcB289b125B523ec0ce508f33546079F4c4c#code
 
 */

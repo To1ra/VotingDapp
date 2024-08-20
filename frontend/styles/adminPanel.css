@@ -1,0 +1,35 @@
+.admin-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  text-align: center;
+}
+
+.admin-panel h1 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center; /* Align buttons horizontally */
+  margin: 20px;
+}
+
+.btn1 {
+  margin: 10px;
+  padding: 15px 30px; /* Larger padding for bigger buttons */
+  border-radius: 5px;
+  background-color: #555555; /* Darker background for distinction */
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px; /* Larger font size */
+  transition: background-color 0.3s;
+}
+
+.btn1:hover {
+  background-color: #777777; /* Lighter on hover */
+}

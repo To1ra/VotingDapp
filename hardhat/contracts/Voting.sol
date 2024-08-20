@@ -10,6 +10,7 @@ contract Voting {
         uint256 id;
         uint256 numberOfvotes;
         string name;
+        int256 [] politicalPreference;
     }
 
     Candidate[] public candidates;
@@ -51,20 +52,24 @@ contract Voting {
         return block.timestamp >= votingStart && block.timestamp <= votingEnd;
     }
     
-    function startElection(string[] memory _candidates, uint256 _votingDuration) public onlyOwner {
+    function startElection(string[] memory _candidates, int256[][]  memory _politicalPreference, uint256 _votingDuration) public onlyOwner {
         require(block.timestamp > votingEnd || votingStart == 0, "Cannot start a new election; an election is already in progress.");
         resetVoters();
         delete candidates; // Clear existing candidates
         for(uint256 i = 0; i < _candidates.length; i++) {
-            candidates.push(Candidate({id: i, name: _candidates[i], numberOfvotes: 0}));
+            candidates.push(Candidate({id: i, name: _candidates[i], numberOfvotes: 0, politicalPreference:  new int256[](2)}));
+            candidates[i].politicalPreference = _politicalPreference[i];
         }
         votingStart = block.timestamp;
         votingEnd = votingStart + (_votingDuration * 1 minutes);
     }
 
-    function addCandidate(string memory _name) public onlyOwner {
+
+
+    function addCandidate(string memory _name, int256[] memory _politicalPreference) public onlyOwner {
         require(block.timestamp <= votingEnd && block.timestamp >= votingStart, "Cannot add candidates; election period has not started or has ended.");
-        candidates.push(Candidate({id: candidates.length, name: _name, numberOfvotes: 0}));
+        candidates.push(Candidate({id: candidates.length, name: _name, numberOfvotes: 0 ,politicalPreference:  new int256[](2)}));
+        candidates[candidates.length - 1].politicalPreference = _politicalPreference;
     }
 
         function voteTo(uint256 _id) public {

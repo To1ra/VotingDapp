@@ -1,36 +1,67 @@
-document.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("createElection")
-    .addEventListener("click", function () {
-      document.getElementById("createElectionModal").style.display = "block";
-    });
+import { initializeGrid, candidateListJS } from "./startElection.js";
 
-  document
-    .getElementsByClassName("close")[0]
-    .addEventListener("click", function () {
-      document.getElementById("createElectionModal").style.display = "none";
-    });
+document.addEventListener("DOMContentLoaded", () => {
+  const ElectionModal = document.getElementById("createElectionModal");
+  const candidateList = document.getElementById("candidateList");
+
+  document.getElementById("createElection").addEventListener("click", () => {
+    ElectionModal.style.display = "block";
+  });
+
+  const closeButton = document.getElementById("closeElectionModal");
+
+  closeButton.addEventListener("click", () => {
+    ElectionModal.style.display = "none";
+    for (let i = 0; i < candidateListJS.length; i++) {
+      delete candidateListJS[i];
+    }
+    candidateList.innerHTML = "";
+  });
 
   window.onclick = function (event) {
-    if (event.target == document.getElementById("createElectionModal")) {
-      document.getElementById("createElectionModal").style.display = "none";
+    if (event.target === ElectionModal) {
+      ElectionModal.style.display = "none";
+      candidateList.innerHTML = "";
     }
   };
 
-  let candidateCount = 0;
+  document.getElementById("addCandidate").addEventListener("click", () => {
+    document.getElementById("newCandidateModal").style.display = "block";
+    initializeGrid();
+  });
 
-  document
-    .getElementById("addCandidate")
-    .addEventListener("click", function () {
-      // Open a new window
-      const newWindow = window.open("", "newWindow", "width=200,height=200");
-      // Write content to the new window
-      newWindow.document.write("<h1>Hello</h1>");
-      // Optionally, you can add styles directly
-      newWindow.document.body.style.textAlign = "center";
-      newWindow.document.body.style.marginTop = "50px";
-      newWindow.document.body.style.fontFamily = "Arial, sans-serif";
-      newWindow.document.body.style.fontSize = "20px";
-      newWindow.document.body.style.color = "black";
-    });
+  document.getElementById("addTheCandidate").addEventListener("click", () => {
+    document.getElementById("candidate").value = "";
+    document.getElementById("newCandidateModal").style.display = "none";
+  });
+
+  document.querySelector(".close1").addEventListener("click", () => {
+    document.getElementById("candidate").value = "";
+    document.getElementById("newCandidateModal").style.display = "none";
+  });
+
+  window.onclick = function (event) {
+    if (event.target == document.getElementById("newCandidateModal")) {
+      document.getElementById("newCandidateModal").style.display = "none";
+    }
+  };
+
+  const tokenBalanceModal = document.getElementById("tokenBalanceModal");
+  const btnTokenBalance = document.getElementById("tokenBalance");
+  const closeBtnTokenBalance =
+    tokenBalanceModal.getElementsByClassName("close")[0];
+
+  btnTokenBalance.addEventListener("click", () => {
+    tokenBalanceModal.style.display = "block";
+  });
+
+  closeBtnTokenBalance.addEventListener("click", () => {
+    tokenBalanceModal.style.display = "none";
+  });
+
+  window.onclick = function (event) {
+    if (event.target === tokenBalanceModal) {
+      tokenBalanceModal.style.display = "none";
+    }
+  };
 });

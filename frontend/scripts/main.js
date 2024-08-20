@@ -1,12 +1,10 @@
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
-export let signer;
-export let contract;
+let signer;
+let contract;
 
-const connectWalletButton = document.getElementById("connectMetamask");
-const userNameDisplay = document.getElementById("userNameDisplay");
-export const contractAddress = "0x1d8D12baE190AfA51343945cDdF9305A2962C558";
-export const contractABI = [
+const contractAddress = "0x453fAcB289b125B523ec0ce508f33546079F4c4c";
+const contractABI = [
   {
     inputs: [
       {
@@ -24,6 +22,11 @@ export const contractABI = [
         internalType: "string",
         name: "_name",
         type: "string",
+      },
+      {
+        internalType: "int256[]",
+        name: "_politicalPreference",
+        type: "int256[]",
       },
     ],
     name: "addCandidate",
@@ -146,6 +149,11 @@ export const contractABI = [
             name: "name",
             type: "string",
           },
+          {
+            internalType: "int256[]",
+            name: "politicalPreference",
+            type: "int256[]",
+          },
         ],
         internalType: "struct Voting.Candidate[]",
         name: "",
@@ -174,6 +182,11 @@ export const contractABI = [
         internalType: "string[]",
         name: "_candidates",
         type: "string[]",
+      },
+      {
+        internalType: "int256[][]",
+        name: "_politicalPreference",
+        type: "int256[][]",
       },
       {
         internalType: "uint256",
@@ -259,22 +272,46 @@ export const contractABI = [
   },
 ];
 
-async function connectWallet() {
-  await provider.send("eth_requestAccounts", []);
-  signer = provider.getSigner();
-  contract = new ethers.Contract(contractAddress, contractABI, signer);
-  const userAddress = await signer.getAddress();
-  const userName = userAddress.substring(userAddress.length - 5);
+// Export the variables
+export { signer, contract, contractAddress, contractABI };
 
-  localStorage.setItem("userName", userName);
-
-  userNameDisplay.innerText = userName;
-  const ownerAddress = await contract.owner();
-  if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
-    document.getElementById("admin").style.display = "block";
+document.addEventListener("DOMContentLoaded", function () {
+  const connectWalletButton = document.getElementById("connectMetamask");
+  const userNameDisplay = document.getElementById("userNameDisplay");
+  if (window.location.href != "http://127.0.0.1:5500/homePage.html") {
+    checkIfWalletIsConnected();
   }
-  document.getElementById("connectMetamask").style.display = "none";
-  document.getElementById("navBar").style.display = "block";
-}
+  async function checkIfWalletIsConnected() {
+    if (ethereum) {
+      try {
+        const accounts = await ethereum.request({ method: "eth_accounts" });
+        if (accounts.length > 0) {
+          connectWallet();
+        } else {
+          console.log("No authorized account found");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      console.log("Please install MetaMask");
+    }
+  }
 
-connectWalletButton.addEventListener("click", connectWallet());
+  async function connectWallet() {
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const userAddress = await signer.getAddress();
+    const userName = userAddress.substring(userAddress.length - 5);
+    localStorage.setItem("userName", userName);
+
+    userNameDisplay.innerText = userName;
+    const ownerAddress = await contract.owner();
+    if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
+      document.getElementById("admin").style.display = "block";
+    }
+    //document.getElementById("connectMetamask").style.display = "none";
+    document.getElementById("navBar").style.display = "block";
+  }
+});
