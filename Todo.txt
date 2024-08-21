@@ -24,16 +24,30 @@ THERE IS NO DOUBLE IS SOLIDITY -> I MULTIPLIED EACH NUMBER BY 100 BEFORE SENDING
 10b) add a timer - DONE
 10c) add a page refresher - DONE
 10d) add a button for voting - DONE
-10g) Create anonymus chooser by 4 questions - DONE
+10e) Create anonymus chooser by 4 questions - DONE
 
 
-11)One Prev election - front only (for now)
+
+10g) Create add candidate button if theres an admin inside the election
+
+
+11a)One Prev election - front only 
+11b) back diapli fund
+11c) Reveal results button (and pay voters)
 
 ----
 
-12) Prev election - back only
+12) fix bug and code:
 
-13) Power Point Make
+code fix:
+1) make it as a class inside previousElection and loadSpecificElection
+BugFix:
+1) if you create an election one after another there`s a bug
+
+
+--------------------------------
+
+13) If there`s IN THURSDAY enough time do the multiple elections feature + see 10 election back
 
 
 

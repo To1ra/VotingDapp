@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Election</title>
+    <link rel="stylesheet" href="styles/electionPage.css" />
+    <link rel="stylesheet" href="styles/homePage.css" />
+    <!-- Using the same CSS file -->
+  </head>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <span style="margin: 10px">ElectionDapp |</span>
+        <sub>Hello, <span id="userNameDisplay">user</span></sub>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Current Election</a></li>
+        <li><a href="#">Past Elections</a></li>
+        <li>
+          <a href="AdminPanel.html" id="admin">Admin Panel</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="content-wrapper">
+      <!-- This will help in aligning the side by side content -->
+      <div id="MainContent">
+        <div id="Header">Election Hash</div>
+        <br />
+        <div id="CandidateBoard">
+          <span>Candidates: </span>
+          <!-- Candidates will be dynamically populated here -->
+        </div>
+        <br />
+        <div id="ResultBoardSorted">
+          <span>Election Results</span>
+        </div>
+
+        <!-- Modal for Survey -->
+      </div>
+      <div id="grid-area">
+        <div id="grid-container">
+          <div id="grid"></div>
+          <div id="point-container"></div>
+          <!-- Container specifically for points -->
+          <div id="axes-labels">
+            <div class="axis-label" id="vertical-axis-top">Akrateia</div>
+            <div class="axis-label" id="vertical-axis-bottom">Kratos</div>
+            <div class="axis-label" id="horizontal-axis-left">Anarchy</div>
+            <div class="axis-label" id="horizontal-axis-right">Archy</div>
+            <div class="quadrant-label" id="top-left">
+              Libertarian Individualist
+            </div>
+            <div class="quadrant-label" id="top-right">
+              Republican Constitutionalist
+            </div>
+            <div class="quadrant-label" id="bottom-left">
+              Democratic Progressivist
+            </div>
+            <div class="quadrant-label" id="bottom-right">
+              Plutocratic Nationalist
+            </div>
+            <div id="center-point">Center</div>
+          </div>
+        </div>
+        <div id="coordinates-display"></div>
+      </div>
+    </div>
+
+    <script type="module" src="scripts/main.js"></script>
+  </body>
+</html>

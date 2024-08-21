@@ -280,7 +280,7 @@ export { signer, contract, contractAddress, contractABI };
 document.addEventListener("DOMContentLoaded", async function () {
   const userNameDisplay = document.getElementById("userNameDisplay");
 
-  if (window.location.href != "http://127.0.0.1:5500/homePage.html") {
+  if (!window.location.href.includes("homePage")) {
     await checkIfWalletIsConnected();
   }
 
@@ -304,22 +304,26 @@ document.addEventListener("DOMContentLoaded", async function () {
       console.log("Please install MetaMask");
     }
   }
-
-  async function connectWallet() {
-    await provider.send("eth_requestAccounts", []);
-    signer = provider.getSigner();
-    contract = new ethers.Contract(contractAddress, contractABI, signer);
-    const userAddress = await signer.getAddress();
-    const userName = userAddress.substring(userAddress.length - 5);
-    localStorage.setItem("userName", userName);
-    //console.log("connected");
-    userNameDisplay.innerText = userName;
-    const ownerAddress = await contract.owner();
-    if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
-      document.getElementById("admin").style.display = "block";
-    }
-
-    //document.getElementById("connectMetamask").style.display = "none";
-    // document.querySelector(".navbar").style.display = "block";
-  }
 });
+
+async function connectWallet() {
+  await provider.send("eth_requestAccounts", []);
+  signer = provider.getSigner();
+  contract = new ethers.Contract(contractAddress, contractABI, signer);
+  const userAddress = await signer.getAddress();
+  const userName = userAddress.substring(userAddress.length - 5);
+  localStorage.setItem("userName", userName);
+  //console.log("connected");
+  userNameDisplay.innerText = userName;
+  const ownerAddress = await contract.owner();
+  if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
+    document.getElementById("admin").style.display = "block";
+  }
+
+  //document.getElementById("connectMetamask").style.display = "none";
+  // document.querySelector(".navbar").style.display = "block";
+}
+
+document
+  .getElementById("connectMetamask")
+  .addEventListener("click", connectWallet);
