@@ -47,6 +47,7 @@ function initializeGrid() {
     gridContainer.style.display = "none";
   });
 }
+
 function writeCandidate() {
   const candidateName = document.getElementById("candidate").value.trim();
   if (candidateName === "") {
@@ -79,17 +80,18 @@ function writeCandidate() {
 }
 
 function prepareCoordinatesForContract(coordinates) {
-  return coordinates.map((coord) => (coord *= 100));
+  return coordinates.map((coord) => parseInt((coord *= 100)));
 }
 
 async function startElection() {
   const electionActive = await Main.contract.electionStarted();
   if (!electionActive) {
-    const duration = 1;
+    const duration = 2;
     const candidatesNames = candidateList.map((candidate) => candidate[0]);
     const candidatesCoordinates = candidateList.map((candidate) =>
       prepareCoordinatesForContract(candidate[1])
     );
+    console.log(candidatesCoordinates);
 
     try {
       const txResponse = await Main.contract.startElection(
@@ -114,4 +116,5 @@ document
   .addEventListener("click", startElection);
 
 let candidateListJS = candidateList;
+
 export { initializeGrid, candidateListJS };

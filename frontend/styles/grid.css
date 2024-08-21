@@ -114,3 +114,12 @@ body {
 #saved-locations li {
   margin: 5px 0;
 }
+
+.point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}

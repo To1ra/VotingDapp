@@ -1,3 +1,5 @@
+import { loadSpecificElection } from "./specificElection.js";
+
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
 let signer;
@@ -275,20 +277,25 @@ const contractABI = [
 // Export the variables
 export { signer, contract, contractAddress, contractABI };
 
-document.addEventListener("DOMContentLoaded", function () {
-  const connectWalletButton = document.getElementById("connectMetamask");
+document.addEventListener("DOMContentLoaded", async function () {
   const userNameDisplay = document.getElementById("userNameDisplay");
+
   if (window.location.href != "http://127.0.0.1:5500/homePage.html") {
-    checkIfWalletIsConnected();
+    await checkIfWalletIsConnected();
   }
+
+  if (window.location.href.includes("SpecificElection")) {
+    await loadSpecificElection();
+  }
+
   async function checkIfWalletIsConnected() {
     if (ethereum) {
       try {
         const accounts = await ethereum.request({ method: "eth_accounts" });
         if (accounts.length > 0) {
-          connectWallet();
+          await connectWallet();
         } else {
-          console.log("No authorized account found");
+          console.log("Log in into metamask");
         }
       } catch (error) {
         console.log(error);
@@ -305,13 +312,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const userAddress = await signer.getAddress();
     const userName = userAddress.substring(userAddress.length - 5);
     localStorage.setItem("userName", userName);
-
+    //console.log("connected");
     userNameDisplay.innerText = userName;
     const ownerAddress = await contract.owner();
     if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
       document.getElementById("admin").style.display = "block";
     }
+
     //document.getElementById("connectMetamask").style.display = "none";
-    document.getElementById("navBar").style.display = "block";
+    // document.querySelector(".navbar").style.display = "block";
   }
 });

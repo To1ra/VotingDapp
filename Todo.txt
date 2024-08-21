@@ -20,12 +20,11 @@ THERE IS NO DOUBLE IS SOLIDITY -> I MULTIPLIED EACH NUMBER BY 100 BEFORE SENDING
 
 
 10) Create the current Election Page [Front]:
-10a) try to replicate the use of the table (main project) though in a nicer way 
-10b) add a timer
-10c) add a page refresher
-10d) add a button for voting
-10e) TEMP__ add a show results button like in the main(in order to see if it works ok for the same logic even though I will replace it ) __TEMP
-10g) Create anonymus chooser by 4 questions
+10a) try to replicate the use of the table (main project) though in a nicer way  -DONE nice!!
+10b) add a timer - DONE
+10c) add a page refresher - DONE
+10d) add a button for voting - DONE
+10g) Create anonymus chooser by 4 questions - DONE
 
 
 11)One Prev election - front only (for now)

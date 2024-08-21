@@ -1,0 +1,257 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+  font-family: "Arial", sans-serif;
+  background: linear-gradient(to right, #6a11cb 0%, #2575fc 100%);
+}
+
+/* Navigation Bar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 50px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+}
+
+.nav-links li {
+  padding: 0 15px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #ffdd40;
+}
+
+/* Flex Container Setup */
+.content-wrapper {
+  display: flex;
+  flex-direction: row-reverse; /* This ensures that the MainContent comes first visually */
+  justify-content: space-between; /* Ensures spacing between elements */
+}
+
+#MainContent,
+#grid-area {
+  flex: 1; /* Both take equal amount of space */
+  margin: 10px; /* Adding some space around for better layout */
+}
+
+/* Grid container and other elements styles */
+#grid-container {
+  width: 100%; /* Full width of its container */
+  margin: 20px 0; /* Only vertical margin */
+  border: 3px solid black;
+  background-color: #f0f0f0;
+}
+
+#grid {
+  background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.axis-label,
+.quadrant-label {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Button Styling */
+.btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #2575fc;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #6a11cb;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+#grid-container {
+  position: relative;
+  width: 600px;
+  height: 600px;
+  margin: 20px auto;
+  border: 3px solid black;
+  background-color: #f0f0f0;
+}
+
+#grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: linear-gradient(to right, black 1px, transparent 1px),
+    linear-gradient(to bottom, black 1px, transparent 1px);
+  background-size: 50% 50%;
+}
+
+#axes-labels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#coordinates-display {
+  margin: 10px auto;
+  width: 800px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.axis-label {
+  position: absolute;
+  font-weight: bold;
+}
+
+#point-container {
+  position: relative; /* Create a positioning context */
+  z-index: 1; /* Ensure it's above base content */
+}
+
+.point,
+.point-label {
+  position: absolute; /* This is necessary for z-index to work */
+  z-index: 10; /* Higher than the parent container */
+}
+
+#vertical-axis-top {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#vertical-axis-bottom {
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+#horizontal-axis-left {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+#horizontal-axis-right {
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.quadrant-label {
+  position: absolute;
+  color: grey;
+  font-weight: bold;
+}
+
+#top-left {
+  top: 20%;
+  left: 15%;
+}
+
+#top-right {
+  top: 20%;
+  right: 12%;
+}
+
+#bottom-left {
+  bottom: 20%;
+  left: 12%;
+}
+
+#bottom-right {
+  bottom: 20%;
+  right: 15%;
+}
+
+#center-point {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#saved-locations {
+  margin: 20px auto;
+  width: 800px;
+  font-size: 16px;
+}
+
+.point-label {
+  position: absolute;
+  color: black;
+  font-weight: bolder; /* This should contrast with the grid background */
+  font-size: 12px; /* Suitable size for readability */
+  transform: translate(0%, -100%); /* Moves the label above the point */
+}
+
+#saved-locations ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+#saved-locations li {
+  margin: 5px 0;
+}
+
+.point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+#surveyModal input[type="range"] {
+  width: 100%;
+  margin: 10px 0;
+}

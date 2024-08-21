@@ -4,8 +4,122 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Election</title>
+    <link rel="stylesheet" href="styles/electionPage.css" />
+    <link rel="stylesheet" href="styles/homePage.css" />
+    <!-- Using the same CSS file -->
   </head>
+  <script
+    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+    type="application/javascript"
+  ></script>
   <body>
-    <script src="scripts/main.js"></script>
+    <nav class="navbar">
+      <div class="logo">
+        <span style="margin: 10px">ElectionDapp |</span>
+        <sub>Hello, <span id="userNameDisplay">user</span></sub>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Current Election</a></li>
+        <li><a href="#">Past Elections</a></li>
+        <li>
+          <a href="AdminPanel.html" id="admin">Admin Panel</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="content-wrapper">
+      <!-- This will help in aligning the side by side content -->
+      <div id="MainContent">
+        <div id="timer">
+          <h2>Election Timer</h2>
+          <p id="timerMessage">Time remaining: <span id="time">-</span></p>
+        </div>
+        <br />
+        <div id="CandidateBoard">
+          <span>Candidates: </span>
+          <!-- Candidates will be dynamically populated here -->
+        </div>
+        <br />
+        <div id="Voting">
+          <h2>Cast Your Vote</h2>
+          <p>Please select the ID of your candidate:</p>
+          <label>
+            <input type="number" id="voteToSend" />
+            <button class="btn" id="sendVote">Send Vote</button>
+          </label>
+          <br />
+          <button class="btn" id="openSurvey">Vote Anonymously</button>
+        </div>
+
+        <!-- Modal for Survey -->
+        <div id="surveyModal" class="modal">
+          <div class="modal-content">
+            <h2>Anonymous Voting</h2>
+            <p>Answer the following questions:</p>
+
+            <label
+              >Archy’s policies promote economic equality and social
+              justice.</label
+            >
+            <input type="range" id="scaleA" min="0" max="1" step="0.01" />
+            <br />
+
+            <label
+              >Anarchy promotes individual freedom and self-governance over
+              centralized authority.</label
+            >
+            <input type="range" id="scaleB" min="0" max="1" step="0.01" />
+            <br />
+
+            <label
+              >Individuals experiencing akrasia should be held accountable for
+              their actions, even if they know those actions are not in their
+              best interest.</label
+            >
+            <input type="range" id="scaleC" min="0" max="1" step="0.01" />
+            <br />
+
+            <label
+              >Strong, centralized authority (Kratos) is necessary to maintain
+              order and enforce laws effectively.</label
+            >
+            <input type="range" id="scaleD" min="0" max="1" step="0.01" />
+            <br />
+
+            <button class="btn" id="submitSurvey">Submit Survey</button>
+          </div>
+        </div>
+      </div>
+      <div id="grid-area">
+        <div id="grid-container">
+          <div id="grid"></div>
+          <div id="point-container"></div>
+          <!-- Container specifically for points -->
+          <div id="axes-labels">
+            <div class="axis-label" id="vertical-axis-top">Akrateia</div>
+            <div class="axis-label" id="vertical-axis-bottom">Kratos</div>
+            <div class="axis-label" id="horizontal-axis-left">Anarchy</div>
+            <div class="axis-label" id="horizontal-axis-right">Archy</div>
+            <div class="quadrant-label" id="top-left">
+              Libertarian Individualist
+            </div>
+            <div class="quadrant-label" id="top-right">
+              Republican Constitutionalist
+            </div>
+            <div class="quadrant-label" id="bottom-left">
+              Democratic Progressivist
+            </div>
+            <div class="quadrant-label" id="bottom-right">
+              Plutocratic Nationalist
+            </div>
+            <div id="center-point">Center</div>
+          </div>
+        </div>
+        <div id="coordinates-display"></div>
+      </div>
+    </div>
+
+    <script type="module" src="scripts/main.js"></script>
   </body>
 </html>
