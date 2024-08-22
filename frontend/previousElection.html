@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles/electionPage.css" />
     <link rel="stylesheet" href="styles/homePage.css" />
     <link rel="stylesheet" href="styles/podieum.css" />
+    <link rel="stylesheet" href="styles/loading.css" />
     <!-- Using the same CSS file -->
     <script
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
@@ -21,17 +22,21 @@
         <span style="margin: 10px">ElectionDapp |</span>
         <sub>Hello, <span id="userNameDisplay">user</span></sub>
       </div>
-      <ul class="nav-links">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Current Election</a></li>
-        <li><a href="#">Past Elections</a></li>
+
+      <ul class="nav-links" id="navBar" style="display: none">
+        <li><a href="homePage.html">Home</a></li>
+        <li><a href="SpecificElection.html">Current Election</a></li>
+        <li><a href="previousElection.html">Past Elections</a></li>
         <li>
-          <a href="AdminPanel.html" id="admin">Admin Panel</a>
+          <a href="AdminPanel.html" id="admin" style="display: none"
+            >Admin Panel</a
+          >
         </li>
       </ul>
     </nav>
+    <div class="loader" id="Loader" style="display: none"></div>
 
-    <div class="content-wrapper">
+    <div class="content-wrapper" id="content-wrapper">
       <!-- This will help in aligning the side by side content -->
       <div id="MainContent">
         <br />
@@ -43,8 +48,8 @@
                 <div class="scoreboard__podium-rank">2</div>
               </div>
               <div class="scoreboard__podium-number">
-                <span id="name0">-</span> <br />
-                <small><span id="totalVotes0">0</span></small>
+                <span id="name1">No Candidate</span> <br />
+                <small><span id="totalVotes1">0 Votes</span></small>
               </div>
             </div>
             <div class="scoreboard__podium">
@@ -52,8 +57,8 @@
                 <div class="scoreboard__podium-rank">1</div>
               </div>
               <div class="scoreboard__podium-number">
-                <span id="name1">-</span> <br />
-                <small><span id="totalVotes1">0</span></small>
+                <span id="name0">No Candidate</span> <br />
+                <small><span id="totalVotes0">0 Votes</span></small>
               </div>
             </div>
             <div class="scoreboard__podium">
@@ -61,8 +66,8 @@
                 <div class="scoreboard__podium-rank">3</div>
               </div>
               <div class="scoreboard__podium-number">
-                <span id="name2">-</span> <br />
-                <small><span id="totalVotes2">0</span></small>
+                <span id="name2">No Candidate</span> <br />
+                <small><span id="totalVotes2">0 Votes</span></small>
               </div>
             </div>
           </div>

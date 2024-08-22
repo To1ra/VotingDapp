@@ -3,7 +3,7 @@ const provider = new ethers.providers.Web3Provider(ethereum);
 let signer;
 let contract;
 
-const contractAddress = "0xD0355BAd63af6085CC21c80ab5F1BE7d7f71123e";
+const contractAddress = "0xf5348F3219250BF86a7f90b81421429D81Dbab49";
 const contractABI = [
   {
     inputs: [
@@ -286,7 +286,7 @@ const contractABI = [
 ];
 
 // Export the variables
-export { signer, contract, contractAddress, contractABI };
+export { signer, contract, contractAddress, contractABI, provider };
 import { loadSpecificElection } from "./specificElection.js"; //bug
 import { loadPreviousElection } from "./previousElection.js";
 

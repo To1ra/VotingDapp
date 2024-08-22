@@ -1,8 +1,411 @@
 import * as Main from "./main.js";
 
-let savedLocations;
+let savedLocations = [];
 let num = 0;
 let candidateList = [];
+const dipaliTokenABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "initialOwner",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "allowance",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "needed",
+        type: "uint256",
+      },
+    ],
+    name: "ERC20InsufficientAllowance",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "balance",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "needed",
+        type: "uint256",
+      },
+    ],
+    name: "ERC20InsufficientBalance",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "approver",
+        type: "address",
+      },
+    ],
+    name: "ERC20InvalidApprover",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "receiver",
+        type: "address",
+      },
+    ],
+    name: "ERC20InvalidReceiver",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "sender",
+        type: "address",
+      },
+    ],
+    name: "ERC20InvalidSender",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+    ],
+    name: "ERC20InvalidSpender",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "OwnableInvalidOwner",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "OwnableUnauthorizedAccount",
+    type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Approval",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "Transfer",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+    ],
+    name: "allowance",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "spender",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "approve",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "account",
+        type: "address",
+      },
+    ],
+    name: "balanceOf",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [
+      {
+        internalType: "uint8",
+        name: "",
+        type: "uint8",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "mintFifty",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "name",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "renounceOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "symbol",
+    outputs: [
+      {
+        internalType: "string",
+        name: "",
+        type: "string",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "totalSupply",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "transfer",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "value",
+        type: "uint256",
+      },
+    ],
+    name: "transferFrom",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+];
+const dipaliTokenAddress = "0xB3edBFC4DC9B276086BdcC06F6875ec2B9B5B534"; // Replace with the actual contract address
 
 function initializeGrid() {
   const coordinatesDisplay = document.getElementById("coordinates-display");
@@ -107,36 +510,59 @@ async function startElection() {
 }
 
 async function checkBalance() {
-  alert("Soon will work better");
-  const balance = await Main.contract.provider.getBalance(
-    Main.contract.address
+  // Assuming the provider is already configured elsewhere in your project
+  const provider = Main.provider;
+
+  const address = Main.contract.address;
+
+  const dipaliTokenContract = new ethers.Contract(
+    dipaliTokenAddress,
+    dipaliTokenABI,
+    provider
   );
-  document.getElementById("balance").innerHTML = balance;
-  console.log(balance);
+  try {
+    const balance = await dipaliTokenContract.balanceOf(address);
+    return parseInt(ethers.utils.formatEther(balance)) + " Dipali Tokens";
+  } catch (error) {
+    console.error("Error fetching Dipali Token balance:", error);
+    return "Error fetching balance";
+  }
 }
 
 if (window.location.href.includes("AdminPanel")) {
   document
     .getElementById("fundContract")
     .addEventListener("click", async () => {
-      const owner = await Main.contract.owner();
-      window.ethereum // Or window.ethereum if you don't support EIP-6963.
-        .request({
-          method: "eth_sendTransaction",
-          // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
-          params: [
-            {
-              // The user's active address.
-              from: owner,
-              // Required except during contract publications.
-              to: Main.contract,
-              // Only required to send ether to the recipient from the initiating external account.
-              value: 100 * 10 ** 18,
-            },
-          ],
-        })
-        .then((txHash) => console.log(txHash))
-        .catch((error) => console.error(error));
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []); // Request account access if needed
+      const signer = provider.getSigner();
+
+      // Correct and complete Dipali Token contract ABI and Address
+
+      const dipaliTokenContract = new ethers.Contract(
+        dipaliTokenAddress,
+        dipaliTokenABI,
+        signer
+      );
+
+      const toAddress = Main.contract.address; // Ensure this is correctly pointing to the recipient address
+      const amountInWei = ethers.utils.parseUnits("100", 18); // 100 tokens assuming 18 decimals
+
+      try {
+        //
+        const txResponse = await dipaliTokenContract.transfer(
+          toAddress,
+          amountInWei,
+          {
+            gasLimit: 100000, // Set a manual gas limit
+          }
+        );
+        console.log("Transaction Hash:", txResponse.hash);
+        const txReceipt = await txResponse.wait();
+        console.log("Transaction confirmed in block:", txReceipt.blockNumber);
+      } catch (error) {
+        console.error("Error sending Dipali Tokens:", error);
+      }
     });
 
   document
@@ -154,4 +580,4 @@ if (window.location.href.includes("AdminPanel")) {
 }
 let candidateListJS = candidateList;
 
-export { initializeGrid, candidateListJS, checkBalance };
+export { initializeGrid, candidateListJS, checkBalance, savedLocations };

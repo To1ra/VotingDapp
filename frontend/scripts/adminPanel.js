@@ -4,7 +4,6 @@ import {
   checkBalance,
 } from "./startElection.js";
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const ElectionModal = document.getElementById("createElectionModal");
   const candidateList = document.getElementById("candidateList");
@@ -59,7 +58,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   btnTokenBalance.addEventListener("click", async () => {
     tokenBalanceModal.style.display = "block";
-    await checkBalance();
+    const num = await checkBalance();
+    document.getElementById("tokenBalanceDisplay").innerHTML = num;
   });
 
   closeBtnTokenBalance.addEventListener("click", () => {

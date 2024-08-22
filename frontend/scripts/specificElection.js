@@ -1,8 +1,9 @@
 import * as Main from "./main.js";
-import { initializeGrid } from "./startElection.js";
+import { initializeGrid, savedLocations } from "./startElection.js";
 let isActiveElection;
 let allCoords = [];
 let ids = [];
+let savedLoc;
 
 async function loadSpecificElection() {
   // Assumes loadContract() initializes your smart contract
@@ -118,6 +119,31 @@ async function loadSpecificElection() {
     }
   }
 
+  async function checkValues(candidateName) {
+    const candidateList = await contract.retrieveVoterList();
+
+    if (!candidateName) {
+      alert("Please enter a candidate name");
+      return;
+    }
+    const location = savedLoc;
+    if (!location) {
+      alert("Please save a location");
+      return;
+    }
+
+    for (let i = 0; i < candidateList.length; i++) {
+      if (candidateList[i][0] === candidateName) {
+        alert("This candidate name is already used.");
+        return false;
+      } else if (candidateList[i][1] === location) {
+        alert("This location is already assigned.");
+        return false;
+      }
+    }
+    return true;
+  }
+
   function plotPoints(data) {
     const pointContainer = document.getElementById("point-container");
     if (!pointContainer) {
@@ -133,7 +159,6 @@ async function loadSpecificElection() {
         return parseFloat(ethers.BigNumber.from(x).toString()) / 100;
       });
 
-      console.log(name, coords);
       // Calculate position based on the grid's dimensions
       const posX = ((coords[0] + 1) / 2) * 600 - 5; // Center the point
       const posY = ((1 - coords[1]) / 2) * 600 - 5; // Invert y-axis and center the point
@@ -180,10 +205,22 @@ async function loadSpecificElection() {
     initializeGrid();
   });
 
-  document.getElementById("addTheCandidate").addEventListener("click", () => {
-    document.getElementById("candidate").value = "";
-    document.getElementById("newCandidateModal").style.display = "none";
-  });
+  document
+    .getElementById("addTheCandidate")
+    .addEventListener("click", async () => {
+      savedLoc = savedLocations.map((coord) => parseInt((coord *= 100)));
+      const candidateName = document.getElementById("candidate").value;
+      const test = await checkValues(candidateName);
+      console.log(candidateName, savedLoc);
+      if (test) {
+        await contract.addCandidate(candidateName, savedLoc);
+        await loadCandidates();
+      } else {
+        alert("This candidate name or coordinates is already used.");
+      }
+      document.getElementById("candidate").value = "";
+      document.getElementById("newCandidateModal").style.display = "none";
+    });
 
   document.querySelector(".close1").addEventListener("click", () => {
     document.getElementById("candidate").value = "";

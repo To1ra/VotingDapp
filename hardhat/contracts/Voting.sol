@@ -43,6 +43,7 @@ contract Voting {
     // }
 
     function payVoters() public onlyOwner  {
+         require(block.timestamp > votingEnd || votingStart == 0, "Cannot pay Voters; an election is already in progress.");
         uint256 amount = 5 * 10**18;  // Assumes the token has 18 decimals
         admin = true;
         for(uint256 i = 0; i < listOfVoters.length; i++) {

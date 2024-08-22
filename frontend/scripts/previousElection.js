@@ -15,7 +15,9 @@ async function displaySortedVoters(contract) {
     return 0;
   });
 
-  if (length < 3) return voterList;
+  if (length < 3) {
+    return voterList;
+  }
   return voterList.slice(0, 3);
 }
 
@@ -27,9 +29,14 @@ async function loadPreviousElection() {
 
   let ended = await contract.admin();
 
+  document.getElementById("content-wrapper").style.display = "none";
+  document.getElementById("Loader").style.display = "block";
+  const txReceipt2 = await candidates.wait();
+  document.getElementById("Loader").style.display = "none";
   if (!isActiveElection && candidates.length > 0 && ended) {
     // Clear previous candidates
     for (let i = 0; i < candidates.length; i++) {
+      document.getElementById("MainContent").style.display = "block";
       const candidate = candidates[i];
       document.getElementById("name" + i).innerHTML = candidate.name;
       document.getElementById("totalVotes" + i).innerHTML =
