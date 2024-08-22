@@ -4,11 +4,9 @@ let savedLocations;
 let num = 0;
 let candidateList = [];
 
-
-const coordinatesDisplay = document.getElementById("coordinates-display");
-const gridContainer = document.getElementById("grid-container");
-
 function initializeGrid() {
+  const coordinatesDisplay = document.getElementById("coordinates-display");
+  const gridContainer = document.getElementById("grid-container");
   gridContainer.style.display = "block";
 
   gridContainer.addEventListener("mousemove", (event) => {
@@ -87,7 +85,7 @@ function prepareCoordinatesForContract(coordinates) {
 async function startElection() {
   const electionActive = await Main.contract.electionStarted();
   if (!electionActive) {
-    const duration = 2;
+    const duration = parseInt(document.getElementById("electionTime").value);
     const candidatesNames = candidateList.map((candidate) => candidate[0]);
     const candidatesCoordinates = candidateList.map((candidate) =>
       prepareCoordinatesForContract(candidate[1])
@@ -108,28 +106,6 @@ async function startElection() {
   }
 }
 
-
-document.getElementById("fundContract").addEventListener("click", async () => {
-  const owner = await Main.contract.owner();
-  window.ethereum // Or window.ethereum if you don't support EIP-6963.
-    .request({
-      method: "eth_sendTransaction",
-      // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
-      params: [
-        {
-          // The user's active address.
-          from: owner,
-          // Required except during contract publications.
-          to: Main.contract,
-          // Only required to send ether to the recipient from the initiating external account.
-          value: 100 * 10 ** 18,
-        },
-      ],
-    })
-    .then((txHash) => console.log(txHash))
-    .catch((error) => console.error(error));
-});
-
 async function checkBalance() {
   alert("Soon will work better");
   const balance = await Main.contract.provider.getBalance(
@@ -139,19 +115,43 @@ async function checkBalance() {
   console.log(balance);
 }
 
-document
-  .getElementById("addTheCandidate")
-  .addEventListener("click", writeCandidate);
+if (window.location.href.includes("AdminPanel")) {
+  document
+    .getElementById("fundContract")
+    .addEventListener("click", async () => {
+      const owner = await Main.contract.owner();
+      window.ethereum // Or window.ethereum if you don't support EIP-6963.
+        .request({
+          method: "eth_sendTransaction",
+          // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
+          params: [
+            {
+              // The user's active address.
+              from: owner,
+              // Required except during contract publications.
+              to: Main.contract,
+              // Only required to send ether to the recipient from the initiating external account.
+              value: 100 * 10 ** 18,
+            },
+          ],
+        })
+        .then((txHash) => console.log(txHash))
+        .catch((error) => console.error(error));
+    });
 
-document
-  .getElementById("submitElection")
-  .addEventListener("click", startElection);
+  document
+    .getElementById("addTheCandidate")
+    .addEventListener("click", writeCandidate);
 
-document.getElementById("endElection").addEventListener("click", () => {
-  Main.contract.payVoters();
-  alert("Election ended");
-});
+  document
+    .getElementById("submitElection")
+    .addEventListener("click", startElection);
 
+  document.getElementById("endElection").addEventListener("click", () => {
+    Main.contract.payVoters();
+    alert("Election ended");
+  });
+}
 let candidateListJS = candidateList;
 
 export { initializeGrid, candidateListJS, checkBalance };

@@ -4,15 +4,14 @@ let isActiveElection;
 let allCoords = [];
 let ids = [];
 
-
 async function loadSpecificElection() {
   // Assumes loadContract() initializes your smart contract
   const contract = Main.contract;
   const owner = await Main.contract.owner();
   isActiveElection = await contract.electionStarted();
-  const userAddress = await signer.getAddress();
+  const userAddress = await Main.signer.getAddress();
 
-  if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
+  if (userAddress.toLowerCase() === owner.toLowerCase()) {
     document.getElementById("addCandidate").style.display = "block";
   }
 

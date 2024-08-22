@@ -1,6 +1,3 @@
-import { loadSpecificElection } from "./specificElection.js"; //bug
-import { loadPreviousElection } from "./previousElection.js";
-
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
 let signer;
@@ -290,6 +287,8 @@ const contractABI = [
 
 // Export the variables
 export { signer, contract, contractAddress, contractABI };
+import { loadSpecificElection } from "./specificElection.js"; //bug
+import { loadPreviousElection } from "./previousElection.js";
 
 document.addEventListener("DOMContentLoaded", async function () {
   const userNameDisplay = document.getElementById("userNameDisplay");
@@ -341,6 +340,8 @@ async function connectWallet() {
   // document.querySelector(".navbar").style.display = "block";
 }
 
-document
-  .getElementById("connectMetamask")
-  .addEventListener("click", connectWallet);
+if (window.location.href.includes("homePage")) {
+  document
+    .getElementById("connectMetamask")
+    .addEventListener("click", connectWallet);
+}
