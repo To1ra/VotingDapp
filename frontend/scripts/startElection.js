@@ -4,6 +4,7 @@ let savedLocations;
 let num = 0;
 let candidateList = [];
 
+
 const coordinatesDisplay = document.getElementById("coordinates-display");
 const gridContainer = document.getElementById("grid-container");
 
@@ -106,6 +107,7 @@ async function startElection() {
     }
   }
 }
+
 
 document.getElementById("fundContract").addEventListener("click", async () => {
   const owner = await Main.contract.owner();

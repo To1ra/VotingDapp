@@ -4,10 +4,11 @@ let isActiveElection;
 let allCoords = [];
 let ids = [];
 
+
 async function loadSpecificElection() {
   // Assumes loadContract() initializes your smart contract
   const contract = Main.contract;
-  const owner = await Main.contract.owner;
+  const owner = await Main.contract.owner();
   isActiveElection = await contract.electionStarted();
   const userAddress = await signer.getAddress();
 

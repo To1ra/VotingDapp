@@ -4,6 +4,7 @@ import {
   checkBalance,
 } from "./startElection.js";
 
+
 document.addEventListener("DOMContentLoaded", () => {
   const ElectionModal = document.getElementById("createElectionModal");
   const candidateList = document.getElementById("candidateList");

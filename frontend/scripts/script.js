@@ -1,4 +1,3 @@
-const ethers = require("ethers");
 
 document.addEventListener("DOMContentLoaded", () => {
   let flag = false;

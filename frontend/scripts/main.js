@@ -1,5 +1,6 @@
-import { loadSpecificElection } from "./specificElection.js";
+import { loadSpecificElection } from "./specificElection.js"; //bug
 import { loadPreviousElection } from "./previousElection.js";
+
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
 let signer;
