@@ -1,4 +1,5 @@
 import * as Main from "./main.js";
+import { initializeGrid } from "./startElection.js";
 let isActiveElection;
 let allCoords = [];
 let ids = [];
@@ -6,7 +7,13 @@ let ids = [];
 async function loadSpecificElection() {
   // Assumes loadContract() initializes your smart contract
   const contract = Main.contract;
+  const owner = await Main.contract.owner;
   isActiveElection = await contract.electionStarted();
+  const userAddress = await signer.getAddress();
+
+  if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
+    document.getElementById("addCandidate").style.display = "block";
+  }
 
   async function updateElectionTimer() {
     const timerElement = document.getElementById("time");
@@ -167,8 +174,30 @@ async function loadSpecificElection() {
         alert("Vote successfully sent!");
       } else alert("You cannt vote when there is no election");
     });
+
+  document.getElementById("addCandidateBtn").addEventListener("click", () => {
+    document.getElementById("newCandidateModal").style.display = "block";
+    initializeGrid();
+  });
+
+  document.getElementById("addTheCandidate").addEventListener("click", () => {
+    document.getElementById("candidate").value = "";
+    document.getElementById("newCandidateModal").style.display = "none";
+  });
+
+  document.querySelector(".close1").addEventListener("click", () => {
+    document.getElementById("candidate").value = "";
+    document.getElementById("newCandidateModal").style.display = "none";
+  });
+
+  window.onclick = function (event) {
+    if (event.target == document.getElementById("newCandidateModal")) {
+      document.getElementById("newCandidateModal").style.display = "none";
+    }
+  };
 }
 
 export { loadSpecificElection };
+
 // This assumes your contract methods are named appropriately and correctly return values.
 // Adjust the methods and properties based on your actual contract's API.

@@ -6,13 +6,12 @@
     <title>Election</title>
     <link rel="stylesheet" href="styles/electionPage.css" />
     <link rel="stylesheet" href="styles/homePage.css" />
+    <link rel="stylesheet" href="styles/podieum.css" />
     <!-- Using the same CSS file -->
   </head>
-  <script
-    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-    type="application/javascript"
-  ></script>
+
   <body>
+    <div id="connectMetamask"></div>
     <nav class="navbar">
       <div class="logo">
         <span style="margin: 10px">ElectionDapp |</span>
@@ -31,18 +30,41 @@
     <div class="content-wrapper">
       <!-- This will help in aligning the side by side content -->
       <div id="MainContent">
-        <div id="Header">Election Hash</div>
         <br />
-        <div id="CandidateBoard">
-          <span>Candidates: </span>
+        <div class="scoreboard">
+          <span id="resText">Results Podium: </span>
+          <div class="scoreboard__podiums">
+            <div class="scoreboard__podium">
+              <div class="scoreboard__podium-base" id="secondPlace">
+                <div class="scoreboard__podium-rank">2</div>
+              </div>
+              <div class="scoreboard__podium-number">
+                <span id="name0">-</span> <br />
+                <small><span id="totalVotes0">0</span></small>
+              </div>
+            </div>
+            <div class="scoreboard__podium">
+              <div class="scoreboard__podium-base" id="firstPlace">
+                <div class="scoreboard__podium-rank">1</div>
+              </div>
+              <div class="scoreboard__podium-number">
+                <span id="name1">-</span> <br />
+                <small><span id="totalVotes1">0</span></small>
+              </div>
+            </div>
+            <div class="scoreboard__podium">
+              <div class="scoreboard__podium-base" id="thirdPlace">
+                <div class="scoreboard__podium-rank">3</div>
+              </div>
+              <div class="scoreboard__podium-number">
+                <span id="name2">-</span> <br />
+                <small><span id="totalVotes2">0</span></small>
+              </div>
+            </div>
+          </div>
           <!-- Candidates will be dynamically populated here -->
         </div>
         <br />
-        <div id="ResultBoardSorted">
-          <span>Election Results</span>
-        </div>
-
-        <!-- Modal for Survey -->
       </div>
       <div id="grid-area">
         <div id="grid-container">

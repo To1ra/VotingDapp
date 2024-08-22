@@ -6,12 +6,10 @@
     <title>Election</title>
     <link rel="stylesheet" href="styles/electionPage.css" />
     <link rel="stylesheet" href="styles/homePage.css" />
+    <link rel="stylesheet" href="styles/CandidateModal.css" />
     <!-- Using the same CSS file -->
   </head>
-  <script
-    src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-    type="application/javascript"
-  ></script>
+
   <body>
     <nav class="navbar">
       <div class="logo">
@@ -51,7 +49,57 @@
           <br />
           <button class="btn" id="openSurvey">Vote Anonymously</button>
         </div>
+        <div id="addCandidate" style="display: none">
+          <h2>Add Candidate</h2>
+          <button class="btn" id="addCandidateBtn">Create new Candidate</button>
 
+          <div id="newCandidateModal" class="modal1">
+            <div class="modal-content1">
+              <span class="close1">&times;</span>
+              <div id="candidateModalContent">
+                <div id="test" align="center">
+                  <input
+                    type="text"
+                    id="candidate"
+                    placeholder="Candidate Name"
+                  />
+                </div>
+                <div id="grid-container">
+                  <div id="grid"></div>
+                  <div id="axes-labels">
+                    <div class="axis-label" id="vertical-axis-top">
+                      Akrateia
+                    </div>
+                    <div class="axis-label" id="vertical-axis-bottom">
+                      Kratos
+                    </div>
+                    <div class="axis-label" id="horizontal-axis-left">
+                      Anarchy
+                    </div>
+                    <div class="axis-label" id="horizontal-axis-right">
+                      Archy
+                    </div>
+                    <div class="quadrant-label" id="top-left">
+                      Libertarian Individualist
+                    </div>
+                    <div class="quadrant-label" id="top-right">
+                      Republican Constitutionalist
+                    </div>
+                    <div class="quadrant-label" id="bottom-left">
+                      Democratic Progressivist
+                    </div>
+                    <div class="quadrant-label" id="bottom-right">
+                      Plutocratic Nationalist
+                    </div>
+                    <div id="center-point"></div>
+                  </div>
+                </div>
+                <div id="coordinates-display">Coordinates: (0.00, 0.00)</div>
+                <button id="addTheCandidate">Add Candidate</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <!-- Modal for Survey -->
         <div id="surveyModal" class="modal">
           <div class="modal-content">
@@ -87,7 +135,7 @@
             <input type="range" id="scaleD" min="0" max="1" step="0.01" />
             <br />
 
-            <button class="btn" id="submitSurvey">Submit Survey</button>
+            <button class="btn" id="submitSurvey">Submit Vote</button>
           </div>
         </div>
       </div>

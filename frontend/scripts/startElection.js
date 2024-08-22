@@ -107,6 +107,36 @@ async function startElection() {
   }
 }
 
+document.getElementById("fundContract").addEventListener("click", async () => {
+  const owner = await Main.contract.owner();
+  window.ethereum // Or window.ethereum if you don't support EIP-6963.
+    .request({
+      method: "eth_sendTransaction",
+      // The following sends an EIP-1559 transaction. Legacy transactions are also supported.
+      params: [
+        {
+          // The user's active address.
+          from: owner,
+          // Required except during contract publications.
+          to: Main.contract,
+          // Only required to send ether to the recipient from the initiating external account.
+          value: 100 * 10 ** 18,
+        },
+      ],
+    })
+    .then((txHash) => console.log(txHash))
+    .catch((error) => console.error(error));
+});
+
+async function checkBalance() {
+  alert("Soon will work better");
+  const balance = await Main.contract.provider.getBalance(
+    Main.contract.address
+  );
+  document.getElementById("balance").innerHTML = balance;
+  console.log(balance);
+}
+
 document
   .getElementById("addTheCandidate")
   .addEventListener("click", writeCandidate);
@@ -115,6 +145,11 @@ document
   .getElementById("submitElection")
   .addEventListener("click", startElection);
 
+document.getElementById("endElection").addEventListener("click", () => {
+  Main.contract.payVoters();
+  alert("Election ended");
+});
+
 let candidateListJS = candidateList;
 
-export { initializeGrid, candidateListJS };
+export { initializeGrid, candidateListJS, checkBalance };

@@ -1,4 +1,8 @@
-import { initializeGrid, candidateListJS } from "./startElection.js";
+import {
+  initializeGrid,
+  candidateListJS,
+  checkBalance,
+} from "./startElection.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const ElectionModal = document.getElementById("createElectionModal");
@@ -47,12 +51,14 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   const tokenBalanceModal = document.getElementById("tokenBalanceModal");
+
   const btnTokenBalance = document.getElementById("tokenBalance");
   const closeBtnTokenBalance =
     tokenBalanceModal.getElementsByClassName("close")[0];
 
-  btnTokenBalance.addEventListener("click", () => {
+  btnTokenBalance.addEventListener("click", async () => {
     tokenBalanceModal.style.display = "block";
+    await checkBalance();
   });
 
   closeBtnTokenBalance.addEventListener("click", () => {

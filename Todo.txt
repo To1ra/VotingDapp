@@ -28,26 +28,28 @@ THERE IS NO DOUBLE IS SOLIDITY -> I MULTIPLIED EACH NUMBER BY 100 BEFORE SENDING
 
 
 
-10g) Create add candidate button if theres an admin inside the election
+10g) Create add candidate button if theres an admin inside the election  - DONE BUT MADE BUGS THAT NEED TO CHECK TM
 
+11a)One Prev election +  Reveal results button - DONE (I should fix the spaces after I finish the project)
 
-11a)One Prev election - front only 
-11b) back diapli fund
-11c) Reveal results button (and pay voters)
+11b) back diapli fund - half done, its kinda a lot of work for wedensday
 
 ----
 
 12) fix bug and code:
 
 code fix:
+0) fix navBar to work normally
 1) make it as a class inside previousElection and loadSpecificElection
+2) check for double voting in frontend
+3) do simple frontend authenication for non admin users
 BugFix:
 1) if you create an election one after another there`s a bug
-
+2?) too much gap between stuff in the previous Election
 
 --------------------------------
 
-13) If there`s IN THURSDAY enough time do the multiple elections feature + see 10 election back
+13?) If there`s enough time IN THURSDAY, do the multiple elections feature + see 10 election back
 
 
 

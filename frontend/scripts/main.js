@@ -1,11 +1,11 @@
 import { loadSpecificElection } from "./specificElection.js";
-
+import { loadPreviousElection } from "./previousElection.js";
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
 let signer;
 let contract;
 
-const contractAddress = "0x453fAcB289b125B523ec0ce508f33546079F4c4c";
+const contractAddress = "0xD0355BAd63af6085CC21c80ab5F1BE7d7f71123e";
 const contractABI = [
   {
     inputs: [
@@ -34,6 +34,19 @@ const contractABI = [
     name: "addCandidate",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "admin",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -288,6 +301,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     await loadSpecificElection();
   }
 
+  if (window.location.href.includes("previousElection")) {
+    await loadPreviousElection();
+  }
   async function checkIfWalletIsConnected() {
     if (ethereum) {
       try {

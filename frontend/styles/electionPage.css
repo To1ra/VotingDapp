@@ -44,12 +44,18 @@ html {
   justify-content: space-between; /* Ensures spacing between elements */
 }
 
+#resText {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+  text-align: center;
+}
+
 #MainContent,
 #grid-area {
   flex: 1; /* Both take equal amount of space */
-  margin: 10px; /* Adding some space around for better layout */
+  margin: 10px 0; /* Adjust the margin to 10px vertically and 0px horizontally */
 }
-
 /* Grid container and other elements styles */
 #grid-container {
   width: 100%; /* Full width of its container */

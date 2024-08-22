@@ -20,6 +20,7 @@ contract Voting {
     uint256 public votingStart;
     uint256 public votingEnd;
     IERC20 public tokenContract;
+    bool public admin; //if the admin payed the voters show the result
 
 
     modifier onlyOwner() {
@@ -37,9 +38,13 @@ contract Voting {
         tokenContract = IERC20(_tokenContract);
     }
 
+    // function getTokenBalance() public view returns(uint256) {
+    //     return tokenContract.balanceOf(address(this));
+    // }
 
     function payVoters() public onlyOwner  {
         uint256 amount = 5 * 10**18;  // Assumes the token has 18 decimals
+        admin = true;
         for(uint256 i = 0; i < listOfVoters.length; i++) {
             if(listOfVoters[i] != owner) { // Check that the voter is not the admin
                 require(tokenContract.transfer(listOfVoters[i], amount), "Failed to transfer tokens");
@@ -55,6 +60,7 @@ contract Voting {
     function startElection(string[] memory _candidates, int256[][]  memory _politicalPreference, uint256 _votingDuration) public onlyOwner {
         require(block.timestamp > votingEnd || votingStart == 0, "Cannot start a new election; an election is already in progress.");
         resetVoters();
+        admin = false;
         delete candidates; // Clear existing candidates
         for(uint256 i = 0; i < _candidates.length; i++) {
             candidates.push(Candidate({id: i, name: _candidates[i], numberOfvotes: 0, politicalPreference:  new int256[](2)}));

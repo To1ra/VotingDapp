@@ -9,12 +9,9 @@
     <link rel="stylesheet" href="styles/CandidateModal.css" />
     <link rel="stylesheet" href="styles/grid.css" />
     <link rel="stylesheet" href="styles/AdminPanel.css" />
-    <script
-      src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
-      type="application/javascript"
-    ></script>
   </head>
   <body>
+    <div id="connectMetamask"></div>
     <nav class="navbar">
       <div class="logo">
         <span style="margin: 10px">ElectionDapp |</span>
@@ -39,6 +36,7 @@
         <button class="btn1" id="createElection">Create Election</button>
         <button class="btn1" id="tokenBalance">Token Balance</button>
         <button class="btn1" id="editElection">Edit Ongoing Election</button>
+        <button class="btn1" id="endElection">End Election</button>
       </div>
     </div>
 
@@ -49,7 +47,7 @@
         <h1>Token Balance Section</h1>
         <div class="modal-section2">
           <label>Balance:</label>
-          <span id="tokenBalanceDisplay">50</span>
+          <span id="tokenBalanceDisplay">-</span>
           Dipali
           <!-- Dynamically display the balance -->
         </div>
