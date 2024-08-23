@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="styles/CandidateModal.css" />
     <link rel="stylesheet" href="styles/grid.css" />
     <link rel="stylesheet" href="styles/AdminPanel.css" />
+    <link rel="stylesheet" href="styles/loading.css" />
     <script
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
       type="application/javascript"
@@ -18,7 +19,7 @@
     <div id="connectMetamask"></div>
     <nav class="navbar">
       <div class="logo">
-        <span style="margin: 10px">ElectionDapp |</span>
+        <span>ElectionDapp |</span>
         <sub>Hello, <span id="userNameDisplay">user</span></sub>
       </div>
 
@@ -34,7 +35,8 @@
       </ul>
     </nav>
     <div class="admin-panel">
-      <h1>Admin Panel</h1>
+      <div class="loader" id="loader" style="display: none"></div>
+      <h1 id="toHide">Admin Panel</h1>
       <div class="button-group">
         <!-- Group for horizontal layout -->
         <button class="btn1" id="createElection">Create Election</button>

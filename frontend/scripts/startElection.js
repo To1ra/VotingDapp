@@ -2,6 +2,12 @@ import * as Main from "./main.js";
 
 let savedLocations = [];
 let num = 0;
+const toHide = document.getElementsByClassName("btn1");
+const toHideText = document.getElementById("toHide");
+const loader = document.getElementById("loader");
+const tokenBalanceModal = document.getElementById("tokenBalanceModal");
+const ElectionModal = document.getElementById("createElectionModal");
+
 let candidateList = [];
 const dipaliTokenABI = [
   {
@@ -496,6 +502,12 @@ async function startElection() {
     console.log(candidatesCoordinates);
 
     try {
+      loader.style.display = "block";
+      for (let i = 0; i < toHide.length; i++) {
+        toHide[i].style.display = "none";
+      }
+      toHideText.style.display = "none";
+      ElectionModal.style.display = "none";
       const txResponse = await Main.contract.startElection(
         candidatesNames,
         candidatesCoordinates,
@@ -505,7 +517,16 @@ async function startElection() {
       alert("Election started", txReceipt.transactionHash);
     } catch (error) {
       console.error("Error in starting election: ", error);
+    } finally {
+      loader.style.display = "none";
+      for (let i = 0; i < toHide.length; i++) {
+        toHide[i].style.display = "block";
+      }
+      toHideText.style.display = "block";
     }
+  } else {
+    alert("Election already started");
+    return;
   }
 }
 
@@ -533,6 +554,15 @@ if (window.location.href.includes("AdminPanel")) {
   document
     .getElementById("fundContract")
     .addEventListener("click", async () => {
+      for (var i = 0; i < toHide.length; i++) {
+        toHide[i].style.display = "none";
+      }
+      toHideText.style.display = "none";
+      loader.style.display = "block";
+      tokenBalanceModal.style.display = "none";
+      document
+        .getElementById("tokenBalanceModal")
+        .getElementsByClassName("close")[0];
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       await provider.send("eth_requestAccounts", []); // Request account access if needed
       const signer = provider.getSigner();
@@ -559,9 +589,16 @@ if (window.location.href.includes("AdminPanel")) {
         );
         console.log("Transaction Hash:", txResponse.hash);
         const txReceipt = await txResponse.wait();
+
         console.log("Transaction confirmed in block:", txReceipt.blockNumber);
       } catch (error) {
         console.error("Error sending Dipali Tokens:", error);
+      } finally {
+        loader.style.display = "none";
+        for (var i = 0; i < toHide.length; i++) {
+          toHide[i].style.display = "block";
+        }
+        toHideText.style.display = "block";
       }
     });
 
@@ -573,9 +610,25 @@ if (window.location.href.includes("AdminPanel")) {
     .getElementById("submitElection")
     .addEventListener("click", startElection);
 
-  document.getElementById("endElection").addEventListener("click", () => {
-    Main.contract.payVoters();
-    alert("Election ended");
+  document.getElementById("endElection").addEventListener("click", async () => {
+    try {
+      for (var i = 0; i < toHide.length; i++) {
+        toHide[i].style.display = "none";
+      }
+      toHideText.style.display = "none";
+      loader.style.display = "block";
+      await Main.contract.payVoters();
+      alert("Voters have been paid");
+    } catch (error) {
+      console.error(error);
+    } finally {
+      for (var i = 0; i < toHide.length; i++) {
+        toHide[i].style.display = "block";
+      }
+      toHideText.style.display = "block";
+      loader.style.display = "none";
+      alert("finished");
+    }
   });
 }
 let candidateListJS = candidateList;

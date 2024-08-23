@@ -34,25 +34,29 @@ THERE IS NO DOUBLE IS SOLIDITY -> I MULTIPLIED EACH NUMBER BY 100 BEFORE SENDING
 
 11b) back diapli fund -DONE
 
-11c) deploy new contract
+11c) deploy new contract - DONE
 ----
+
+
+
 
 12) fix bug and code:
 
 code fix:
 0) fix navBar to work normally - DONE
-0.5) Make loders to each tx
+0.5) Make loders to each tx - DONE
+0.8) Fix design in current election - DONE
+2) check for double voting in frontend - create front condition - DONE
+2.5) check for double election creation - create front condition - DONE
+
+
 1) make it as a class inside previousElection and loadSpecificElection
-2) check for double voting in frontend - create front condition
-2.5) check for double election creation - create front condition
 3) do simple frontend authenication for non admin users
-BugFix:
-1) if you create an election one after another there`s a bug
-2?) too much gap between stuff in the previous Election
 
 --------------------------------
 
 13?) If there`s enough time IN THURSDAY, do the multiple elections feature + see 10 election back
+
 
 
 

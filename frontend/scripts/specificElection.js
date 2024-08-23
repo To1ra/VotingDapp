@@ -7,13 +7,23 @@ let savedLoc;
 
 async function loadSpecificElection() {
   // Assumes loadContract() initializes your smart contract
+  const loader = document.getElementById("loader");
+  const contentWrapper = document.getElementById("content-wrapper");
+
   const contract = Main.contract;
-  const owner = await Main.contract.owner();
-  isActiveElection = await contract.electionStarted();
   const userAddress = await Main.signer.getAddress();
+  const owner = await contract.owner();
+  isActiveElection = await contract.electionStarted();
 
   if (userAddress.toLowerCase() === owner.toLowerCase()) {
     document.getElementById("addCandidate").style.display = "block";
+  }
+
+  try {
+    await updateElectionTimer();
+    await loadCandidates();
+  } catch (err) {
+    console.log(err);
   }
 
   async function updateElectionTimer() {
@@ -21,20 +31,21 @@ async function loadSpecificElection() {
     setInterval(async () => {
       isActiveElection = await contract.electionStarted();
       if (isActiveElection) {
+        loader.style.display = "none"; // Hide the loader
+        contentWrapper.style.display = "flex";
         const remainingTime = await contract.electionTimer();
         const timeInSeconds = ethers.BigNumber.from(remainingTime).toNumber();
         timerElement.textContent = `${timeInSeconds} seconds remaining`;
         if (timeInSeconds <= 0) {
           window.location.href = "http://127.0.0.1:5500/frontend/homePage.html";
+          alert("Election has ended");
         }
       } else {
         window.location.href = "http://127.0.0.1:5500/frontend/homePage.html";
+        alert("Election has ended");
       }
     }, 2500);
   }
-
-  await updateElectionTimer();
-  await loadCandidates();
 
   const modal = document.getElementById("surveyModal");
   const openSurveyButton = document.getElementById("openSurvey");
@@ -63,9 +74,13 @@ async function loadSpecificElection() {
   // Modify the anoynmouslyVoting function to accept the scale values
   async function anoynmouslyVoting(a, b, c, d) {
     // Replace with actual data
-    // Replace with actual data
     isActiveElection = await contract.electionStarted();
     if (isActiveElection) {
+      const allVoters = await contract.retrieveVotersAddress();
+      if (Main.signer.address in allVoters) {
+        alert("You have already voted");
+        return;
+      } // check if the voter already voted
       let res1 = a - b;
       let res2 = c - d;
       let chosenID = calculateClosestID(res1, res2, allCoords, ids);
@@ -190,16 +205,22 @@ async function loadSpecificElection() {
   document
     .getElementById("sendVote")
     .addEventListener("click", async function () {
-      isActiveElection = await contract.electionStarted();
-      if (isActiveElection) {
-        const candidateId = parseInt(
-          document.getElementById("voteToSend").value
-        );
-        await contract.voteTo(candidateId);
+      const loader = document.getElementById("Loader");
+      loader.style.display = "block"; // Show the loader when vote is sent
+      const candidateId = parseInt(document.getElementById("voteToSend").value);
+      try {
+        if (Main.signer.address in allVoters) {
+          alert("You have already voted");
+          return;
+        }
+        await Main.contract.voteTo(candidateId);
         alert("Vote successfully sent!");
-      } else alert("You cannt vote when there is no election");
+      } catch (error) {
+        alert("Failed to send vote: " + error.message);
+      } finally {
+        loader.style.display = "none"; // Hide the loader after transaction confirmation
+      }
     });
-
   document.getElementById("addCandidateBtn").addEventListener("click", () => {
     document.getElementById("newCandidateModal").style.display = "block";
     initializeGrid();

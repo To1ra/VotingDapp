@@ -1,5 +1,8 @@
 /* HTML: <div class="loader"></div> */
 .loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
   width: 85px;
   height: 50px;
   --g1: conic-gradient(from 90deg at left 3px top 3px, #0000 90deg, #fff 0);

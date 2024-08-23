@@ -23,34 +23,39 @@ async function displaySortedVoters(contract) {
 
 async function loadPreviousElection() {
   const contract = Main.contract;
-  const candidates = await displaySortedVoters(contract);
-  isActiveElection = await contract.electionStarted();
   let matrixData = [];
-
   let ended = await contract.admin();
+  const loader = document.getElementById("loader");
+  const contentWrapper = document.getElementById("content-wrapper");
 
-  document.getElementById("content-wrapper").style.display = "none";
-  document.getElementById("Loader").style.display = "block";
-  const txReceipt2 = await candidates.wait();
-  document.getElementById("Loader").style.display = "none";
-  if (!isActiveElection && candidates.length > 0 && ended) {
-    // Clear previous candidates
-    for (let i = 0; i < candidates.length; i++) {
-      document.getElementById("MainContent").style.display = "block";
-      const candidate = candidates[i];
-      document.getElementById("name" + i).innerHTML = candidate.name;
-      document.getElementById("totalVotes" + i).innerHTML =
-        candidate.numberOfvotes + " Votes";
-      matrixData.push(candidate);
+  try {
+    const candidates = await displaySortedVoters(contract);
+    isActiveElection = await contract.electionStarted();
+
+    if (!isActiveElection && candidates.length > 0 && ended) {
+      // Clear previous candidates
+
+      for (let i = 0; i < candidates.length; i++) {
+        document.getElementById("MainContent").style.display = "block";
+        const candidate = candidates[i];
+        document.getElementById("name" + i).innerHTML = candidate.name;
+        document.getElementById("totalVotes" + i).innerHTML =
+          candidate.numberOfvotes + " Votes";
+        matrixData.push(candidate);
+      }
+      plotPoints(matrixData, candidates[0].id);
+      contentWrapper.style.display = "block";
+      loader.style.display = "none";
+    } else if (!isActiveElection && candidates.length > 0) {
+      window.location.href = "homePage.html";
+      alert("Wait for the admin to gather the votes.");
+    } else {
+      window.location.href = "homePage.html";
+      alert("Can't Show Results");
     }
-
-    plotPoints(matrixData, candidates[0].id);
-  } else if (!isActiveElection && candidates.length > 0) {
-    window.location.href = "homePage.html";
-    alert("Wait for the admin to gather the votes.");
-  } else {
-    window.location.href = "homePage.html";
-    alert("Cant Show Results");
+  } catch (error) {
+    console.error("Failed to load election data:", error);
+    alert("Error loading data.");
   }
 }
 

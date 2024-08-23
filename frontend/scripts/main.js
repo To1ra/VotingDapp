@@ -287,7 +287,7 @@ const contractABI = [
 
 // Export the variables
 export { signer, contract, contractAddress, contractABI, provider };
-import { loadSpecificElection } from "./specificElection.js"; //bug
+import { loadSpecificElection } from "./specificElection.js";
 import { loadPreviousElection } from "./previousElection.js";
 
 document.addEventListener("DOMContentLoaded", async function () {

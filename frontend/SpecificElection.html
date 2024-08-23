@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles/electionPage.css" />
     <link rel="stylesheet" href="styles/homePage.css" />
     <link rel="stylesheet" href="styles/CandidateModal.css" />
+    <link rel="stylesheet" href="styles/loading.css" />
     <!-- Using the same CSS file -->
     <script
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
@@ -17,7 +18,7 @@
   <body>
     <nav class="navbar">
       <div class="logo">
-        <span style="margin: 10px">ElectionDapp |</span>
+        <span>ElectionDapp |</span>
         <sub>Hello, <span id="userNameDisplay">user</span></sub>
       </div>
 
@@ -33,7 +34,9 @@
       </ul>
     </nav>
 
-    <div class="content-wrapper">
+    <div id="loader" class="loader"></div>
+
+    <div class="content-wrapper" id="content-wrapper" style="display: none">
       <!-- This will help in aligning the side by side content -->
       <div id="MainContent">
         <div id="timer">

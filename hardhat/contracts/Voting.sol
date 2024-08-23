@@ -33,7 +33,7 @@ contract Voting {
         _;
     }
 
- constructor(address _tokenContract) {
+    constructor(address _tokenContract) {
         owner = msg.sender;
         tokenContract = IERC20(_tokenContract);
     }
