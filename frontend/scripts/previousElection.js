@@ -49,7 +49,7 @@ class previousElection {
         this.plotPoints(matrixData, candidates[0].id);
         contentWrapper.style.display = "block";
         loader.style.display = "none";
-      } else if (!isActiveElection && candidates.length > 0) {
+      } else if (!this.isActiveElection && candidates.length > 0) {
         window.location.href = "homePage.html";
         alert("Wait for the admin to gather the votes.");
       } else {

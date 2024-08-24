@@ -18,8 +18,7 @@ class specificElection {
   async loadSpecificElection() {
     const userAddress = await Main.signer.getAddress();
     const owner = await this.contract.owner();
-    isActiveElection = await this.contract.electionStarted();
-
+    this.isActiveElection = await this.contract.electionStarted();
     if (userAddress.toLowerCase() === owner.toLowerCase()) {
       document.getElementById("addCandidate").style.display = "block";
     }
@@ -36,7 +35,7 @@ class specificElection {
   async loadCandidates() {
     this.isActiveElection = await this.contract.electionStarted();
     let matrixData = [];
-    if (!isActiveElection) return;
+    if (! this.isActiveElection) return;
     else {
       const candidates = await this.contract.retrieveVoterList();
       const candidateBoard = document.getElementById("CandidateBoard");
@@ -53,7 +52,6 @@ class specificElection {
         this.ids.push(candidate.id);
         matrixData.push(candidate);
       }
-
       this.plotPoints(matrixData);
     }
   }
@@ -98,8 +96,8 @@ class specificElection {
   async updateElectionTimer() {
     const timerElement = document.getElementById("time");
     setInterval(async () => {
-      isActiveElection = await contract.electionStarted();
-      if (isActiveElection) {
+     this.isActiveElection = await Main.contract.electionStarted();
+      if (this.isActiveElection) {
         this.loader.style.display = "none"; // Hide the loader
         this.contentWrapper.style.display = "flex";
         const remainingTime = await contract.electionTimer();
@@ -179,7 +177,7 @@ function calculateClosestID(res1, res2, allCoords, ids) {
 
 await Main.checkIfWalletIsConnected();
 let startElectionFunction = new startElection();
-const specificElectionClass = new previousElection();
+const specificElectionClass = new specificElection();
 specificElectionClass.loadSpecificElection();
 
 // Event Listeners

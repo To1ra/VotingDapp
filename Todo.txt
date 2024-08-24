@@ -47,7 +47,7 @@ code fix:
 0.5) Make loders to each tx - DONE
 0.8) Fix design in current election - DONE
 2) check for double voting in frontend - create front condition - DONE
-2.5) check for double election creation - create front condition - DONE
+2.5) check for double election creation - create front condition 
 
 
 1) make it as a class inside previousElection and loadSpecificElection
