@@ -1,14 +1,6 @@
 import * as Main from "./main.js";
 
-let savedLocations = [];
-let num = 0;
-const toHide = document.getElementsByClassName("btn1");
-const toHideText = document.getElementById("toHide");
-const loader = document.getElementById("loader");
-const tokenBalanceModal = document.getElementById("tokenBalanceModal");
 const ElectionModal = document.getElementById("createElectionModal");
-
-let candidateList = [];
 const dipaliTokenABI = [
   {
     inputs: [
@@ -411,226 +403,160 @@ const dipaliTokenABI = [
     type: "function",
   },
 ];
-const dipaliTokenAddress = "0xB3edBFC4DC9B276086BdcC06F6875ec2B9B5B534"; // Replace with the actual contract address
+const dipaliTokenAddress = "0xB3edBFC4DC9B276086BdcC06F6875ec2B9B5B534";
 
-function initializeGrid() {
-  const coordinatesDisplay = document.getElementById("coordinates-display");
-  const gridContainer = document.getElementById("grid-container");
-  gridContainer.style.display = "block";
-
-  gridContainer.addEventListener("mousemove", (event) => {
-    const rect = gridContainer.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      // Fallback or error handling if the container has not been properly initialized
-      console.error("Grid container dimensions are zero.");
-      return; // Exit the function to avoid invalid calculations
-    }
-
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
-    const gridX = (x - 0.5) * 2;
-    const gridY = (0.5 - y) * 2;
-
-    coordinatesDisplay.textContent = `Coordinates: (${gridX.toFixed(
-      2
-    )}, ${gridY.toFixed(2)})`;
-  });
-
-  gridContainer.addEventListener("click", (event) => {
-    const rect = gridContainer.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      console.error("Grid container dimensions are zero.");
-      return;
-    }
-
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
-    const gridX = (x - 0.5) * 2;
-    const gridY = (0.5 - y) * 2;
-
-    const location = [gridX.toFixed(2), gridY.toFixed(2)]; // Store as an array of numbers
-    savedLocations = location;
-    coordinatesDisplay.textContent =
-      "Coordinates chosen at " + location.join(", ");
-    gridContainer.style.display = "none";
-  });
-}
-
-function writeCandidate() {
-  const candidateName = document.getElementById("candidate").value.trim();
-  if (candidateName === "") {
-    alert("Please enter a candidate name");
-    return;
-  }
-  const location = savedLocations;
-  if (location === "") {
-    alert("Please save a location");
-    return;
-  }
-  // Retrieve existing candidates from the candidate list
-
-  for (let i = 0; i < candidateList.length; i++) {
-    if (candidateList[i][0] === candidateName) {
-      alert("This candidate name is already used.");
-      return;
-    } else if (candidateList[i][1] === location) {
-      alert("This location is already assigned.");
-      return;
-    }
+class startElection {
+  constructor() {
+    this.savedLocations = [];
+    this.candidateList = [];
+    this.num = 0;
+    this.toHide = document.getElementById("toHide");
+    this.loader = document.getElementById("loader");
+    this.ButtonHide = document.getElementsByClassName("btn1");
   }
 
-  candidateList.push([candidateName, location]);
-  // If no duplicates, add the candidate
-  document.getElementById(
-    "candidateList"
-  ).innerHTML += `<div id="candidateID${num++}">${candidateName}, ${location}</div> `;
-  console.log(candidateList);
+  initializeGrid() {
+    const coordinatesDisplay = document.getElementById("coordinates-display");
+    const gridContainer = document.getElementById("grid-container");
+    gridContainer.style.display = "block";
+
+    gridContainer.addEventListener("mousemove", (event) => {
+      const rect = gridContainer.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) {
+        // Fallback or error handling if the container has not been properly initialized
+        console.error("Grid container dimensions are zero.");
+        return; // Exit the function to avoid invalid calculations
+      }
+
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const gridX = (x - 0.5) * 2;
+      const gridY = (0.5 - y) * 2;
+
+      coordinatesDisplay.textContent = `Coordinates: (${gridX.toFixed(
+        2
+      )}, ${gridY.toFixed(2)})`;
+    });
+
+    gridContainer.addEventListener("click", (event) => {
+      const rect = gridContainer.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return;
+
+      const x = (event.clientX - rect.left) / rect.width;
+      const y = (event.clientY - rect.top) / rect.height;
+      const gridX = (x - 0.5) * 2;
+      const gridY = (0.5 - y) * 2;
+
+      this.savedLocations = [gridX.toFixed(2), gridY.toFixed(2)]; // Store as an array of numbers
+
+      coordinatesDisplay.textContent =
+        "Coordinates chosen at " + this.savedLocations.join(", ");
+      gridContainer.style.display = "none";
+    });
+  }
+
+  writeCandidate() {
+    const candidateName = document.getElementById("candidate").value.trim();
+    if (!candidateName) {
+      alert("Please enter a candidate name");
+      return;
+    }
+    if (!this.savedLocations) {
+      alert("Please save a location");
+      return;
+    }
+    // Retrieve existing candidates from the candidate list
+
+    for (let i = 0; i < this.candidateList.length; i++) {
+      if (this.candidateList[i][0] === candidateName) {
+        alert("This candidate name is already used.");
+        return;
+      } else if (this.candidateList[i][1] === this.savedLocations) {
+        alert("This location is already assigned.");
+        return;
+      }
+    }
+
+    this.candidateList.push([candidateName, this.savedLocations]);
+    console.log(this.candidateList);
+    // If no duplicates, add the candidate
+    document.getElementById(
+      "candidateList"
+    ).innerHTML += `<div id="candidateID${this.num++}">${candidateName}, ${
+      this.savedLocations
+    }</div> `;
+    console.log(this.candidateList.length);
+  }
+
+  async startElectionFunction() {
+    const electionActive = await Main.contract.electionStarted();
+    if (!electionActive) {
+      const duration = parseInt(document.getElementById("electionTime").value);
+      console.log(this.candidateList);
+      const candidatesNames = this.candidateList.map(
+        (candidate) => candidate[0]
+      );
+      const candidatesCoordinates = this.candidateList.map((candidate) =>
+        prepareCoordinatesForContract(candidate[1])
+      );
+      console.log(candidatesCoordinates);
+
+      try {
+        if (!duration) {
+          alert("You have to submit the duration of the election!");
+          return;
+        }
+        loader.style.display = "block";
+        for (let i = 0; i < this.ButtonHide.length; i++) {
+          this.ButtonHide[i].style.display = "none";
+        }
+        toHide.style.display = "none";
+        ElectionModal.style.display = "none";
+        const txResponse = await Main.contract.startElection(
+          candidatesNames,
+          candidatesCoordinates,
+          duration
+        );
+        const txReceipt = await txResponse.wait();
+        alert("Election started", txReceipt.transactionHash);
+      } catch (error) {
+        console.error("Error in starting election: ", error);
+      } finally {
+        loader.style.display = "none";
+        for (let i = 0; i < this.ButtonHide.length; i++) {
+          this.ButtonHide[i].style.display = "block";
+        }
+        toHide.style.display = "block";
+      }
+    } else {
+      alert("Election already started");
+      return;
+    }
+  }
+
+  async checkBalance() {
+    // Assuming the provider is already configured elsewhere in your project
+    const provider = Main.provider;
+
+    const address = Main.contract.address;
+
+    const dipaliTokenContract = new ethers.Contract(
+      dipaliTokenAddress,
+      dipaliTokenABI,
+      provider
+    );
+    try {
+      const balance = await dipaliTokenContract.balanceOf(address);
+      return parseInt(ethers.utils.formatEther(balance)) + " Dipali Tokens";
+    } catch (error) {
+      console.error("Error fetching Dipali Token balance:", error);
+      return "Error fetching balance";
+    }
+  }
 }
 
 function prepareCoordinatesForContract(coordinates) {
   return coordinates.map((coord) => parseInt((coord *= 100)));
 }
 
-async function startElection() {
-  const electionActive = await Main.contract.electionStarted();
-  if (!electionActive) {
-    const duration = parseInt(document.getElementById("electionTime").value);
-    const candidatesNames = candidateList.map((candidate) => candidate[0]);
-    const candidatesCoordinates = candidateList.map((candidate) =>
-      prepareCoordinatesForContract(candidate[1])
-    );
-    console.log(candidatesCoordinates);
-
-    try {
-      loader.style.display = "block";
-      for (let i = 0; i < toHide.length; i++) {
-        toHide[i].style.display = "none";
-      }
-      toHideText.style.display = "none";
-      ElectionModal.style.display = "none";
-      const txResponse = await Main.contract.startElection(
-        candidatesNames,
-        candidatesCoordinates,
-        duration
-      );
-      const txReceipt = await txResponse.wait();
-      alert("Election started", txReceipt.transactionHash);
-    } catch (error) {
-      console.error("Error in starting election: ", error);
-    } finally {
-      loader.style.display = "none";
-      for (let i = 0; i < toHide.length; i++) {
-        toHide[i].style.display = "block";
-      }
-      toHideText.style.display = "block";
-    }
-  } else {
-    alert("Election already started");
-    return;
-  }
-}
-
-async function checkBalance() {
-  // Assuming the provider is already configured elsewhere in your project
-  const provider = Main.provider;
-
-  const address = Main.contract.address;
-
-  const dipaliTokenContract = new ethers.Contract(
-    dipaliTokenAddress,
-    dipaliTokenABI,
-    provider
-  );
-  try {
-    const balance = await dipaliTokenContract.balanceOf(address);
-    return parseInt(ethers.utils.formatEther(balance)) + " Dipali Tokens";
-  } catch (error) {
-    console.error("Error fetching Dipali Token balance:", error);
-    return "Error fetching balance";
-  }
-}
-
-if (window.location.href.includes("AdminPanel")) {
-  document
-    .getElementById("fundContract")
-    .addEventListener("click", async () => {
-      for (var i = 0; i < toHide.length; i++) {
-        toHide[i].style.display = "none";
-      }
-      toHideText.style.display = "none";
-      loader.style.display = "block";
-      tokenBalanceModal.style.display = "none";
-      document
-        .getElementById("tokenBalanceModal")
-        .getElementsByClassName("close")[0];
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      await provider.send("eth_requestAccounts", []); // Request account access if needed
-      const signer = provider.getSigner();
-
-      // Correct and complete Dipali Token contract ABI and Address
-
-      const dipaliTokenContract = new ethers.Contract(
-        dipaliTokenAddress,
-        dipaliTokenABI,
-        signer
-      );
-
-      const toAddress = Main.contract.address; // Ensure this is correctly pointing to the recipient address
-      const amountInWei = ethers.utils.parseUnits("100", 18); // 100 tokens assuming 18 decimals
-
-      try {
-        //
-        const txResponse = await dipaliTokenContract.transfer(
-          toAddress,
-          amountInWei,
-          {
-            gasLimit: 100000, // Set a manual gas limit
-          }
-        );
-        console.log("Transaction Hash:", txResponse.hash);
-        const txReceipt = await txResponse.wait();
-
-        console.log("Transaction confirmed in block:", txReceipt.blockNumber);
-      } catch (error) {
-        console.error("Error sending Dipali Tokens:", error);
-      } finally {
-        loader.style.display = "none";
-        for (var i = 0; i < toHide.length; i++) {
-          toHide[i].style.display = "block";
-        }
-        toHideText.style.display = "block";
-      }
-    });
-
-  document
-    .getElementById("addTheCandidate")
-    .addEventListener("click", writeCandidate);
-
-  document
-    .getElementById("submitElection")
-    .addEventListener("click", startElection);
-
-  document.getElementById("endElection").addEventListener("click", async () => {
-    try {
-      for (var i = 0; i < toHide.length; i++) {
-        toHide[i].style.display = "none";
-      }
-      toHideText.style.display = "none";
-      loader.style.display = "block";
-      await Main.contract.payVoters();
-      alert("Voters have been paid");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      for (var i = 0; i < toHide.length; i++) {
-        toHide[i].style.display = "block";
-      }
-      toHideText.style.display = "block";
-      loader.style.display = "none";
-      alert("finished");
-    }
-  });
-}
-let candidateListJS = candidateList;
-
-export { initializeGrid, candidateListJS, checkBalance, savedLocations };
+export { startElection };

@@ -1,7 +1,7 @@
 const ethereum = window.ethereum;
 const provider = new ethers.providers.Web3Provider(ethereum);
-let signer;
-let contract;
+let signer = "";
+let contract = "";
 
 const contractAddress = "0xf5348F3219250BF86a7f90b81421429D81Dbab49";
 const contractABI = [
@@ -286,41 +286,33 @@ const contractABI = [
 ];
 
 // Export the variables
-export { signer, contract, contractAddress, contractABI, provider };
-import { loadSpecificElection } from "./specificElection.js";
-import { loadPreviousElection } from "./previousElection.js";
 
-document.addEventListener("DOMContentLoaded", async function () {
-  const userNameDisplay = document.getElementById("userNameDisplay");
+// import { specificElection } from "./specificElection.js";
+const userNameDisplay = document.getElementById("userNameDisplay");
 
-  if (!window.location.href.includes("homePage")) {
-    await checkIfWalletIsConnected();
-  }
+const ethereumInit = async () => {
+  const ethereum = window.ethereum;
+  const provider = new ethers.providers.Web3Provider(ethereum);
+};
 
-  if (window.location.href.includes("SpecificElection")) {
-    await loadSpecificElection();
-  }
+async function checkIfWalletIsConnected() {
+  ethereumInit();
 
-  if (window.location.href.includes("previousElection")) {
-    await loadPreviousElection();
-  }
-  async function checkIfWalletIsConnected() {
-    if (ethereum) {
-      try {
-        const accounts = await ethereum.request({ method: "eth_accounts" });
-        if (accounts.length > 0) {
-          await connectWallet();
-        } else {
-          console.log("Log in into metamask");
-        }
-      } catch (error) {
-        console.log(error);
+  if (ethereum) {
+    try {
+      const accounts = await ethereum.request({ method: "eth_accounts" });
+      if (accounts.length > 0) {
+        await connectWallet();
+      } else {
+        console.log("Log in into metamask");
       }
-    } else {
-      console.log("Please install MetaMask");
+    } catch (error) {
+      console.log(error);
     }
+  } else {
+    console.log("Please install MetaMask");
   }
-});
+}
 
 async function connectWallet() {
   await provider.send("eth_requestAccounts", []);
@@ -345,3 +337,13 @@ if (window.location.href.includes("homePage")) {
     .getElementById("connectMetamask")
     .addEventListener("click", connectWallet);
 }
+
+export {
+  signer,
+  contract,
+  contractAddress,
+  contractABI,
+  provider,
+  connectWallet,
+  checkIfWalletIsConnected,
+};
