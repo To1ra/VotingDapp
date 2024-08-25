@@ -327,9 +327,6 @@ async function connectWallet() {
   if (userAddress.toLowerCase() === ownerAddress.toLowerCase()) {
     document.getElementById("admin").style.display = "block";
   }
-
-  //document.getElementById("connectMetamask").style.display = "none";
-  // document.querySelector(".navbar").style.display = "block";
 }
 
 if (window.location.href.includes("homePage")) {

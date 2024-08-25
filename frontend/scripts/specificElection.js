@@ -294,4 +294,10 @@ window.onclick = function (event) {
   }
 };
 
+window.onclick = function (event) {
+  if (event.target == document.getElementById("surveyModal")) {
+    document.getElementById("surveyModal").style.display = "none";
+  }
+};
+
 export { specificElection };
