@@ -44,7 +44,7 @@ THERE IS NO DOUBLE IS SOLIDITY -> I MULTIPLIED EACH NUMBER BY 100 BEFORE SENDING
 
 code fix:
 0) fix navBar to work normally - DONE
-0.5) Make loders to each tx - DONE
+0.5) Make loders to some tx - DONE
 0.8) Fix design in current election - DONE
 2) check for double voting in frontend - create front condition - DONE
 2.5) check for double election creation - create front condition 

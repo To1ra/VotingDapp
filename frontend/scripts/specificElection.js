@@ -35,7 +35,7 @@ class specificElection {
   async loadCandidates() {
     this.isActiveElection = await this.contract.electionStarted();
     let matrixData = [];
-    if (! this.isActiveElection) return;
+    if (!this.isActiveElection) return;
     else {
       const candidates = await this.contract.retrieveVoterList();
       const candidateBoard = document.getElementById("CandidateBoard");
@@ -51,6 +51,10 @@ class specificElection {
         this.allCoords.push(candidate.politicalPreference.map((x) => x / 100));
         this.ids.push(candidate.id);
         matrixData.push(candidate);
+      }
+      if (this.ids.length > 0) {
+        document.getElementById("voteToSend").min = Math.min(...this.ids);
+        document.getElementById("voteToSend").max = Math.max(...this.ids);
       }
       this.plotPoints(matrixData);
     }
@@ -96,11 +100,11 @@ class specificElection {
   async updateElectionTimer() {
     const timerElement = document.getElementById("time");
     setInterval(async () => {
-     this.isActiveElection = await Main.contract.electionStarted();
+      this.isActiveElection = await Main.contract.electionStarted();
       if (this.isActiveElection) {
         this.loader.style.display = "none"; // Hide the loader
         this.contentWrapper.style.display = "flex";
-        const remainingTime = await contract.electionTimer();
+        const remainingTime = await this.contract.electionTimer();
         const timeInSeconds = ethers.BigNumber.from(remainingTime).toNumber();
         timerElement.textContent = `${timeInSeconds} seconds remaining`;
         if (timeInSeconds <= 0) {
@@ -115,50 +119,73 @@ class specificElection {
   }
 
   async checkValues(candidateName) {
-    const candidateList = await contract.retrieveVoterList();
+    const candidateList = await this.contract.retrieveVoterList();
 
     if (!candidateName) {
+      console.log("No candidate name provided.");
       alert("Please enter a candidate name");
       return;
     }
-    const location = savedLoc;
+    const location = this.savedLoc;
     if (!location) {
+      console.log("No location saved.");
       alert("Please save a location");
       return;
     }
 
+    let nameUsed = false;
+    let locationUsed = false;
+
     for (let i = 0; i < candidateList.length; i++) {
-      if (candidateList[i][0] === candidateName) {
-        alert("This candidate name is already used.");
-        return false;
-      } else if (candidateList[i][1] === location) {
-        alert("This location is already assigned.");
-        return false;
-      }
+      if (candidateList[i].name.toLowerCase() === candidateName.toLowerCase())
+        nameUsed = true;
+
+      if (candidateList[i].location === location) locationUsed = true;
     }
+
+    if (nameUsed) {
+      alert("This candidate name is already used.");
+      return false;
+    } else if (locationUsed) {
+      alert("This location is already assigned.");
+      return false;
+    }
+    console.log("No duplicates found. Proceeding with candidate addition.");
     return true;
   }
+}
+
+// Helper function to check if the user has already voted
+async function hasAlreadyVoted() {
+  const userAddress = await Main.signer.getAddress();
+  const allVoters = await Main.contract.retrieveVotersAddress();
+  return allVoters.includes(userAddress);
 }
 
 //Anonymous Voting
 
 async function anoynmouslyVoting(a, b, c, d) {
-  // Replace with actual data
-  const isActiveElection = await contract.electionStarted();
-  if (isActiveElection) {
-    const allVoters = await Main.contract.retrieveVotersAddress();
-    if (Main.signer.address in allVoters) {
-      alert("You have already voted");
-      return;
-    } // check if the voter already voted
-    let res1 = a - b;
-    let res2 = c - d;
-    let chosenID = calculateClosestID(res1, res2, allCoords, ids);
-    await Main.contract.voteTo(chosenID);
-    alert("Vote successfully sent!");
-  } else {
+  const isActiveElection = await Main.contract.electionStarted();
+  if (!isActiveElection) {
     alert("You cannot vote when there is no election.");
+    return;
   }
+
+  if (await hasAlreadyVoted()) {
+    alert("You have already voted");
+    return;
+  }
+
+  let res1 = a - b;
+  let res2 = c - d;
+  let chosenID = calculateClosestID(
+    res1,
+    res2,
+    specificElectionClass.allCoords,
+    specificElectionClass.ids
+  );
+  await Main.contract.voteTo(chosenID);
+  alert("Vote successfully sent!");
 }
 
 function calculateClosestID(res1, res2, allCoords, ids) {
@@ -206,20 +233,24 @@ submitSurveyButton.addEventListener("click", async function () {
 document
   .getElementById("sendVote")
   .addEventListener("click", async function () {
-    const loader = document.getElementById("loader");
-    loader.style.display = "block"; // Show the loader when vote is sent
     const candidateId = parseInt(document.getElementById("voteToSend").value);
+
+    if (isNaN(candidateId)) {
+      alert("Please select a valid candidate");
+      return;
+    }
+
+    if (await hasAlreadyVoted()) {
+      alert("You have already voted");
+      return;
+    }
+
     try {
-      if (Main.signer.address in allVoters) {
-        alert("You have already voted");
-        return;
-      }
-      await Main.contract.voteTo(candidateId);
+      const txResponse = await Main.contract.voteTo(candidateId);
+      await txResponse.wait();
       alert("Vote successfully sent!");
     } catch (error) {
       alert("Failed to send vote: " + error.message);
-    } finally {
-      loader.style.display = "none"; // Hide the loader after transaction confirmation
     }
   });
 
@@ -233,17 +264,16 @@ document.getElementById("addCandidateBtn").addEventListener("click", () => {
 document
   .getElementById("addTheCandidate")
   .addEventListener("click", async () => {
-    startElectionFunction.savedLoc = startElectionFunction.savedLocations.map(
-      (coord) => parseInt((coord *= 100))
-    );
+    console.log(startElectionFunction.savedLocations);
+    let temp = startElectionFunction.savedLocations;
+    temp = temp.map((coord) => parseInt((coord *= 100)));
+
     const candidateName = document.getElementById("candidate").value;
-    const test = await startElectionFunction.checkValues(candidateName);
+    const test = await specificElectionClass.checkValues(candidateName);
     if (test) {
-      await contract.addCandidate(
-        candidateName,
-        startElectionFunction.savedLoc
-      );
-      await startElectionFunction.loadCandidates();
+      await Main.contract.addCandidate(candidateName, temp);
+      await specificElectionClass.loadCandidates();
+      //ADD LOADER UNTILL THE PREV IT ALL LOADS UP
     } else {
       alert("This candidate name or coordinates is already used.");
     }

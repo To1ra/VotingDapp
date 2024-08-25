@@ -419,7 +419,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   await Main.checkIfWalletIsConnected();
   let startElectionStuff = await new startElection();
-
+  const userAddress = await Main.signer.getAddress();
+  const ownerAddress = await Main.contract.owner();
+  if (!(userAddress.toLowerCase() === ownerAddress.toLowerCase())) {
+    window.location.href = "homePage.html";
+  }
   async function fundContract() {
     for (var i = 0; i < toHide.length; i++) {
       toHide[i].style.display = "none";
@@ -497,27 +501,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
   document.getElementById("endElection").addEventListener("click", async () => {
+    let txResponse;
     try {
       const test = Main.contract.retrieveVotersAddress();
       const owner = await Main.contract.owner();
-      if (owner in test) {
+      const admin = await Main.contract.admin();
+      const ended = await Main.contract.electionStarted();
+      if (admin) {
+        alert("Election already ended");
+        return;
+      } else if (ended) {
+        alert("Election time didnt end yet");
+        return;
+      } else if (owner in test && test.length == 1) {
+        alert("Voters have already been paid");
       }
+
       for (var i = 0; i < toHide.length; i++) {
         toHide[i].style.display = "none";
       }
       toHideText.style.display = "none";
       loader.style.display = "block";
-      await Main.contract.payVoters();
+      txResponse = await Main.contract.payVoters();
       alert("Voters have been paid");
     } catch (error) {
       console.error(error);
     } finally {
+      if (txResponse) {
+        const wait = await txResponse.wait();
+      }
       for (var i = 0; i < toHide.length; i++) {
         toHide[i].style.display = "block";
       }
       toHideText.style.display = "block";
       loader.style.display = "none";
-      alert("finished");
     }
   });
 
